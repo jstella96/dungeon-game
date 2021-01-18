@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace속성:매퍼파일의 완전한경로 .xml는 생략 -->
+
+<mapper namespace="com.allstar.dungeon.mybatis.dungeon">
+	
+	
+	<select id="memberLoginCheck" parameterType="java.util.Map" resultType="int">
+		select count(*) from member where id='${id}' and pwd='${pwd}'
+	</select>
+	<select id="memberInfoCall" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from member where id='${id}'
+	</select>
+	<insert id="memberInsert">
+		insert into member values(${id},${pwd},'1',2,12)
+	</insert>
+	<update id="membedsadate" parameterType="java.util.Map">
+		
+	</update>
+
+	
+</mapper>
