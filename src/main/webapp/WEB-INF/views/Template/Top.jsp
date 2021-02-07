@@ -107,6 +107,12 @@ treasureOpenImg.src = '<c:url value="/resources/img/map/treasureOpen.png"/>';
 var keyImg =new Image;
 keyImg.src = '<c:url value="/resources/img/map/key.png"/>';
 
+var bbsImg =new Image;
+bbsImg.src = '<c:url value="/resources/img/map/bbs.png"/>';
+
+var noticImg =new Image;
+noticImg.src = '<c:url value="/resources/img/map/notic1.jpg"/>';
+
 //디폴트 false 사용하는 페이지에서 true로 전환
 var monsterExistence = false;
 var treasureExistence = false;
@@ -170,7 +176,7 @@ function mapChange(){
 //    drawBrick(brickImg,BrickPositionArr,true);
 //    drawMonster();
 //    drawCharacter(characterImg,characterPositionArr,true);
-//배열 4 개 일시 x축 y축 가로길이 세로길이
+// 배열 4 개 일시 x축 y축 가로길이 세로길이
 //아마 물건 기준.. 음.. 해골같은 배경에 쓰이려나>? 
 function drawCharacter(characterImg,characterPositionArr,crashCheck){
 	  if(characterPositionArr.length == 4){
@@ -180,10 +186,28 @@ function drawCharacter(characterImg,characterPositionArr,crashCheck){
                         characterPositionArr[2],
                         characterPositionArr[3]);
         if(crashCheck){           
-            targetCrash(characterPositionArr[0] ,characterPositionArr[1],characterPositionArr[2],characterPositionArr[3]);                
-        }    
-    }
-}
+            var state = targetCrash(characterPositionArr[0] ,characterPositionArr[1],characterPositionArr[2],characterPositionArr[3]);                
+            if(state != null){
+        		switch (state){
+           		    case 'left':
+           		   			  myCharacterX -= myCharacterSpeed;
+           		        break;
+           		    case 'rigth':
+           		   			  myCharacterX += myCharacterSpeed;
+           		        break;
+           		    case 'top':
+           		  			   myCharacterY += myCharacterSpeed;
+           		        break;
+           		    case 'bottom':
+           		  			   myCharacterY -= myCharacterSpeed;
+           		        break;
+           		    default :
+           		       		console.log("error");
+        			}
+        	   }    
+    	 }
+	}
+}	  
 
 //보물상자 그리기
 function drawTreasure(treasureImg,treasurePositionArr){
@@ -409,19 +433,19 @@ function drawMonster(){
 		switch (state){
    		    case 'left':
    		    	myCharacterX -= 50;
-             	LanternCheck = true;
+             //	LanternCheck = true;
    		        break;
    		    case 'rigth':
 	   		    myCharacterX += 50;
-	            LanternCheck = true;
+	          //  LanternCheck = true;
    		        break;
    		    case 'top':
    		    	myCharacterY += 50;
-   	            LanternCheck = true;
+   	         //   LanternCheck = true;
    		        break;
    		    case 'bottom':
    		    	myCharacterY -= 50;
-   	            LanternCheck = true;
+   	         //   LanternCheck = true;
    		        break;
    		    default :
    		    	console.log('drawMonster() error');
@@ -505,53 +529,6 @@ console.log(diamondNo);
 </c:if>
 
 
-function draw() {
-    //1] 캔버스 전체 삭제 후 새로 그리기
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-   
-    //2] 바닥에 그려지는 순서 배경 -> 벽 - > 캐릭터 
-    drawBackground(backgroundImg);
-    drawBrick(brickImg,BrickPositionArr,true);
-    drawMyCharacter();
-    mapChange();
-   
-    <c:if test="${!empty diaList}">
-	    <c:forEach var="item" items="${diaList }" varStatus="loop">	
-			drawDiamond(diamondImg,[standardLength*(${item.x}-1),standardLength*${item.y}-diamondLength,diamondLength,diamondLength],diamondNo[${loop.index}],diamondState[${loop.index}]);
-		</c:forEach>
-	</c:if>
-    
-   // drawDiamond(diamondImg,[standardLength*(3-1),standardLength*2-diamondLength,diamondLength,diamondLength],0,chdia[0]);
-    //drawDiamond(diamondImg,[standardLength*(4-1),standardLength*2-diamondLength,diamondLength,diamondLength],1,chdia[1]);
-    //drawDiamond(diamondImg,[standardLength*(5-1),standardLength*2-diamondLength,diamondLength,diamondLength],2,chdia[2]);
-     if(monsterExistence){
-    	drawMonster();
-     }
-     if(treasureExistence){
-     	drawTreasure(treasureImg,treasurePositionArr);
-      }
-     if(LanternCheck){
-    	 Lantern(); 
-    	 LanternCount += 1;
-    	 if(LanternCount>1000){
-    		 LanternCount = 0;
-    		 LanternCheck = false;
-    	 }
-     }
-   // drawCharacter(characterImg,[400,200+30,70,70],true);  
-   // drawCharacter(treasureCloseImg,[400,330,70,70],true);  
-}
-
-var LanternCheck = false;
-var LanternCount = 0;
-function Lantern(){
-	grd = ctx.createRadialGradient(myCharacterX+35, myCharacterY+35, 20,  myCharacterX+35, myCharacterY+35, 150),
-    grd.addColorStop(0, "rgba(255, 255, 220, 0.1)");
-    grd.addColorStop(1, "rgba( 0,0, 0, 1)");
-    ctx.rect(0, 0, 13*standardLength,9*standardLength);
-    ctx.fillStyle = grd;
-    ctx.fill();
-}
 
 function getDiamondAjax(diamondNumber){
 	
@@ -569,6 +546,6 @@ function getDiamondAjax(diamondNumber){
 	});
 }
 
-var interval = setInterval(draw, 10);
+
 
 </script>
