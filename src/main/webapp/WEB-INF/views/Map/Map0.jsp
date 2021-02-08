@@ -19,8 +19,28 @@ BrickPositionArr = [
                    [0,1,2,3,4,5,6,7,8,9,10,11,12],
                    [0,1,2,3,4,5,6,7,8,9,10,11,12]
                 ]; 
-                
+/*Map0에서 만 사용하는 이미지*/
+var bbsImg =new Image;
+bbsImg.src = '<c:url value="/resources/img/map/bbs.png"/>';
+
+var noticImg =new Image;
+noticImg.src = '<c:url value="/resources/img/map/notic1.jpg"/>';
+
+var lanternImg = new Image;
+lanternImg.src = '<c:url value="/resources/img/map/lanternDark.png"/>';
+
+/*시작위치 */
+myCharacterX = 180;
+myCharacterY = 520;
+
+
 var noticExistence = false;
+var prolog = true;
+var timeCount = 0;
+var LanternCheck = true;
+
+
+
 
 function draw() {
     //1] 캔버스 전체 삭제 후 새로 그리기
@@ -31,43 +51,75 @@ function draw() {
     drawBrick(brickImg,BrickPositionArr,true);
     drawMyCharacter();
     mapChange();
-   
-    <c:if test="${!empty diaList}">
-	    <c:forEach var="item" items="${diaList }" varStatus="loop">	
-			drawDiamond(diamondImg,[standardLength*(${item.x}-1),standardLength*${item.y}-diamondLength,diamondLength,diamondLength],diamondNo[${loop.index}],diamondState[${loop.index}]);
-		</c:forEach>
-	</c:if>
-    
-   // drawDiamond(diamondImg,[standardLength*(3-1),standardLength*2-diamondLength,diamondLength,diamondLength],0,chdia[0]);
-    //drawDiamond(diamondImg,[standardLength*(4-1),standardLength*2-diamondLength,diamondLength,diamondLength],1,chdia[1]);
-    //drawDiamond(diamondImg,[standardLength*(5-1),standardLength*2-diamondLength,diamondLength,diamondLength],2,chdia[2]);
-     if(monsterExistence){
-    	drawMonster();
-     }
-     if(treasureExistence){
-     	drawTreasure(treasureImg,treasurePositionArr);
-      }
-     if(LanternCheck){
-    	 Lantern(); 
-    	 LanternCount += 1;
-    	 if(LanternCount>1000){
-    		 LanternCount = 0;
-    		 LanternCheck = false;
-    	 }
-     }
-     drawCharacter(bbsImg,[600,200+30,150,150],true);  
-     if(noticExistence){
-    	ctx.drawImage(noticImg, 200,300,300,200);  
-     }
-     else{
-    	
-     }
+    drawCharacter(bbsImg,[700,200+30,150,150],true);  
      
-   // drawCharacter(treasureCloseImg,[400,330,70,70],true);  
+     if( myCharacterX > 500 &&  myCharacterX < 800 &&  myCharacterY > 200 &&  myCharacterY < 500 ){
+		 if(noticExistence){
+			 ctx.drawImage(noticImg, 200,300,300,200);  
+		 }
+	 }else{
+   	     noticExistence=false;
+     }  
+     
+     if(LanternCheck){
+    	
+      	 Lantern(); 
+      	 ctx.drawImage(lanternImg, 500,400,50,50);
+       }
+     
+     timeCount++;
+     ctx.fillStyle = '#999999';
+     ctx.font = ' bold 28px Arial, sans-serif';
+     if(prolog && timeCount>200 && timeCount<500){
+    	  ctx.fillText("여기가 어디지..", 250, 250);
+     }if(timeCount>500 && timeCount < 700){
+    	  ctx.fillText("어..저게 뭐지 렌턴인가?", 250, 250);
+         
+     }if(timeCount>700 && timeCount < 900){
+    	
+    	  if(myCharacterX<=450){
+    		  myCharacterX += 3; 
+    	  }else if(myCharacterY >= 400){
+    		  myCharacterY -= 3;
+    	  }
+          
+      }if(timeCount>900 && timeCount < 1100){
+    	   ctx.fillText("불을 지펴보자", 250, 250);
+    	   
+      }if(timeCount>1100 && timeCount < 1200){
+    	   ctx.fillText("치직.. 치치직...", 250, 250);
+	       if(timeCount%2 == 0){
+	       lanternImg.src = '<c:url value="/resources/img/map/lanternRed.png"/>';
+	       }else{
+	       lanternImg.src = '<c:url value="/resources/img/map/lanternYellow.png"/>';   
+	       }
+	   }if(timeCount>1250){
+	      LanternCheck = false;
+	      ctx.fillText("어 저기 안내판이 있잖아 가봐야겠다", 250, 250);
+       }
+       
+     
+    	 
+    	 /*if(myCharacterX <= 400){
+    		 myCharacterX += 3; 
+    	 }else{
+    		 myCharacterY -= 3;	 
+    	 }*/
+       	
+ }
+     
+
+
+
+	
+
+
+function startMotion(){
+	
 }
 
-var LanternCheck = false;
-var LanternCount = 0;
+
+
 function Lantern(){
 	grd = ctx.createRadialGradient(myCharacterX+35, myCharacterY+35, 20,  myCharacterX+35, myCharacterY+35, 150),
     grd.addColorStop(0, "rgba(255, 255, 220, 0.1)");
@@ -85,14 +137,11 @@ document.addEventListener("keydown", keyDownNoticHandler, false);
 function keyDownNoticHandler(e) {
 	         
 	if(e.keyCode == 32) {
-		if( myCharacterX > 500 &&  myCharacterX < 800 &&  myCharacterY > 200 &&  myCharacterY < 500 ){
-			 if(noticExistence){
-		    	   noticExistence=false; 
-		       }else{
-		    	   noticExistence=true
-		     }  
-		}
-      
+		 if(noticExistence){
+	    	   noticExistence=false; 
+	       }else{
+	    	   noticExistence=true
+	     }   
     }   
 }
 

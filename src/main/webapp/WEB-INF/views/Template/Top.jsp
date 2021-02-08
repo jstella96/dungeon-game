@@ -14,7 +14,7 @@
 
 <canvas id="myCanvas" width="1170" height="810"></canvas>
 <br>
-<div id='test'>1</div>
+<div id='test' style="width:1170px; height:810; background-color: red;"></div>
 <script>
 //캔버스 사용 설정
 var canvas = document.getElementById("myCanvas");
@@ -107,11 +107,6 @@ treasureOpenImg.src = '<c:url value="/resources/img/map/treasureOpen.png"/>';
 var keyImg =new Image;
 keyImg.src = '<c:url value="/resources/img/map/key.png"/>';
 
-var bbsImg =new Image;
-bbsImg.src = '<c:url value="/resources/img/map/bbs.png"/>';
-
-var noticImg =new Image;
-noticImg.src = '<c:url value="/resources/img/map/notic1.jpg"/>';
 
 //디폴트 false 사용하는 페이지에서 true로 전환
 var monsterExistence = false;
