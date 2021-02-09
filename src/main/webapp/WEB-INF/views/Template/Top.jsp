@@ -107,6 +107,12 @@ treasureOpenImg.src = '<c:url value="/resources/img/map/treasureOpen.png"/>';
 var keyImg =new Image;
 keyImg.src = '<c:url value="/resources/img/map/key.png"/>';
 
+var design1Img = new Image;
+design1Img.src = '<c:url value="/resources/img/map/design1.gif"/>';
+
+var design2Img = new Image;
+design2Img.src = '<c:url value="/resources/img/map/design2.png"/>';
+
 
 //디폴트 false 사용하는 페이지에서 true로 전환
 var monsterExistence = false;
@@ -180,28 +186,59 @@ function drawCharacter(characterImg,characterPositionArr,crashCheck){
                         characterPositionArr[1],
                         characterPositionArr[2],
                         characterPositionArr[3]);
-        if(crashCheck){           
-            var state = targetCrash(characterPositionArr[0] ,characterPositionArr[1],characterPositionArr[2],characterPositionArr[3]);                
-            if(state != null){
-        		switch (state){
-           		    case 'left':
-           		   			  myCharacterX -= myCharacterSpeed;
-           		        break;
-           		    case 'rigth':
-           		   			  myCharacterX += myCharacterSpeed;
-           		        break;
-           		    case 'top':
-           		  			   myCharacterY += myCharacterSpeed;
-           		        break;
-           		    case 'bottom':
-           		  			   myCharacterY -= myCharacterSpeed;
-           		        break;
-           		    default :
-           		       		console.log("error");
-        			}
-        	   }    
+	        if(crashCheck){           
+	            var state = targetCrash(characterPositionArr[0] ,characterPositionArr[1],characterPositionArr[2],characterPositionArr[3]);                
+	            if(state != null){
+	        		switch (state){
+	           		    case 'left':
+	           		   			  myCharacterX -= myCharacterSpeed;
+	           		        break;
+	           		    case 'rigth':
+	           		   			  myCharacterX += myCharacterSpeed;
+	           		        break;
+	           		    case 'top':
+	           		  			   myCharacterY += myCharacterSpeed;
+	           		        break;
+	           		    case 'bottom':
+	           		  			   myCharacterY -= myCharacterSpeed;
+	           		        break;
+	           		    default :
+	           		       		console.log("error");
+	        			}
+	        	   }    
     	 }
-	}
+	}else{
+		 ctx.drawImage(characterImg,
+                 characterPositionArr[0],
+                 characterPositionArr[1],
+                 characterPositionArr[2],
+                 characterPositionArr[3],
+                 characterPositionArr[4],
+                 characterPositionArr[5],
+                 characterPositionArr[6],
+                 characterPositionArr[7]);
+	 	if(crashCheck){           
+		     var state = targetCrash(characterPositionArr[4] ,characterPositionArr[5],characterPositionArr[6],characterPositionArr[7]);                
+		     if(state != null){
+		 		switch (state){
+		    		    case 'left':
+		    		   			  myCharacterX -= myCharacterSpeed;
+		    		        break;
+		    		    case 'rigth':
+		    		   			  myCharacterX += myCharacterSpeed;
+		    		        break;
+		    		    case 'top':
+		    		  			   myCharacterY += myCharacterSpeed;
+		    		        break;
+		    		    case 'bottom':
+		    		  			   myCharacterY -= myCharacterSpeed;
+		    		        break;
+		    		    default :
+		    		       		console.log("error");
+		 			}
+		 	   }    
+		 }
+	 }
 }	  
 
 //보물상자 그리기
@@ -345,57 +382,26 @@ function drawMyCharacter(){
    // ctx.drawImage(myCharacterImg,,0,0,35,54) 
    //자르는 시작x, 시작 y, 길이x, 길이, y , 캐릭터 위치x, 위치y , 사진 사이즈 x, 사이즈 y)
     if(!rightPressed && !leftPressed && !downPressed & !upPressed){
-        ctx.drawImage(myCharacterImg,
-                        myCharacterStopImgLocation[0],
-                        myCharacterStopImgLocation[1],
-                        myCharacterStopImgLocation[2],
-                        myCharacterStopImgLocation[3],
-                        myCharacterX, myCharacterY,
-                        characterWidth,characterHeight);
+    	stopMotion()
     }else if(rightPressed) {
         myCharacterX += myCharacterSpeed;
-        ctx.drawImage(myCharacterImg,
-                        myCharacterRightImgLocation[0],
-                        myCharacterRightImgLocation[1],
-                        myCharacterRightImgLocation[2],
-                        myCharacterRightImgLocation[3],
-                        myCharacterX ,myCharacterY,
-                        characterWidth,characterHeight);
+        rigthMotion();
     }
     else if(leftPressed) {
         myCharacterX -= myCharacterSpeed;
-        ctx.drawImage(myCharacterImg,
-                        myCharacterLeftImgLocation[0],
-                        myCharacterLeftImgLocation[1],
-                        myCharacterLeftImgLocation[2],
-                        myCharacterLeftImgLocation[3],
-                        myCharacterX,myCharacterY,
-                        characterWidth,characterHeight);
+        leftMotion()
 
     }else if(downPressed) {
         myCharacterY += myCharacterSpeed;
-        ctx.drawImage(myCharacterImg,
-                        myCharacterDownImgLocation[0],
-                        myCharacterDownImgLocation[1],
-                        myCharacterDownImgLocation[2],
-                        myCharacterDownImgLocation[3],
-                        myCharacterX,myCharacterY,
-                        characterWidth,characterHeight);
+        downMotion()
 
     }
     else if(upPressed) {
         myCharacterY -= myCharacterSpeed;
-        ctx.drawImage(myCharacterImg,
-                        myCharacterUpImgLocation[0],
-                        myCharacterUpImgLocation[1],
-                        myCharacterUpImgLocation[2],
-                        myCharacterUpImgLocation[3],
-                        myCharacterX ,myCharacterY,
-                        characterWidth,characterHeight);
+        upMotion()
 
     } 
 }
-
 
 //몬스터 그리는 메서드, 몬스터 정보는 전역변수로 각 페이지에서 받아 온다, 각 페이지 타일즈 선언으로 인하여. 
 function drawMonster(){
@@ -541,6 +547,54 @@ function getDiamondAjax(diamondNumber){
 	});
 }
 
+
+//캐릭터 모션
+function stopMotion(){
+ctx.drawImage(myCharacterImg,
+        myCharacterStopImgLocation[0],
+        myCharacterStopImgLocation[1],
+        myCharacterStopImgLocation[2],
+        myCharacterStopImgLocation[3],
+        myCharacterX, myCharacterY,
+        characterWidth,characterHeight);  
+}
+function rigthMotion(){
+	ctx.drawImage(myCharacterImg,
+            myCharacterRightImgLocation[0],
+            myCharacterRightImgLocation[1],
+            myCharacterRightImgLocation[2],
+            myCharacterRightImgLocation[3],
+            myCharacterX ,myCharacterY,
+            characterWidth,characterHeight);
+}
+function upMotion(){
+	 ctx.drawImage(myCharacterImg,
+             myCharacterUpImgLocation[0],
+             myCharacterUpImgLocation[1],
+             myCharacterUpImgLocation[2],
+             myCharacterUpImgLocation[3],
+             myCharacterX ,myCharacterY,
+             characterWidth,characterHeight);
+}
+function downMotion(){
+	 ctx.drawImage(myCharacterImg,
+             myCharacterDownImgLocation[0],
+             myCharacterDownImgLocation[1],
+             myCharacterDownImgLocation[2],
+             myCharacterDownImgLocation[3],
+             myCharacterX,myCharacterY,
+             characterWidth,characterHeight);
+}
+function leftMotion(){
+	ctx.drawImage(myCharacterImg,
+            myCharacterLeftImgLocation[0],
+            myCharacterLeftImgLocation[1],
+            myCharacterLeftImgLocation[2],
+            myCharacterLeftImgLocation[3],
+            myCharacterX,myCharacterY,
+            characterWidth,characterHeight);
+}
+	
 
 
 </script>

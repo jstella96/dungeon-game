@@ -54,6 +54,7 @@ function draw() {
     //2] 바닥에 그려지는 순서 배경 -> 벽 - > 캐릭터 
     drawBackground(backgroundImg);
     drawBrick(brickImg,BrickPositionArr,true);
+    BackgroundDesign()
     drawMyCharacter();
     mapChange();
    
@@ -72,20 +73,24 @@ function draw() {
      if(treasureExistence){
      	drawTreasure(treasureImg,treasurePositionArr);
       }
-     if(LanternCheck){
-    	 Lantern(); 
-    	 LanternCount += 1;
-    	 if(LanternCount>1000){
-    		 LanternCount = 0;
-    		 LanternCheck = false;
-    	 }
-     }
+     
+    
    // drawCharacter(characterImg,[400,200+30,70,70],true);  
    // drawCharacter(treasureCloseImg,[400,330,70,70],true);  
 }
 
+function BackgroundDesign(){
+	 ctx.drawImage(design2Img,128,95,32,32,300,300,40,40)
+	 ctx.drawImage(design2Img,128,66,32,30,300,350,40,40)
+	 ctx.drawImage(design2Img,0,67,32,30,300,400,40,40)
+	 ctx.drawImage(design2Img,161,8,30,27,300,450,40,40)
+
+}
+
+
+
 var interval = setInterval(draw, 10);
-var LanternCheck = false;
+
 </script>
 
 
