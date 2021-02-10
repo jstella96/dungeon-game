@@ -1,4 +1,4 @@
-package com.allstar.dungeon.map;
+package com.allstar.dungeon.web;
 
 import java.util.List;
 import java.util.Map;

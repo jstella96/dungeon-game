@@ -22,10 +22,10 @@ BrickPositionArr = [
 
 
 //몬스터 필수 값 
-monsterExistence = true;
+
 var monsterX=5*standardLength,
     monsterY=8*standardLength-50,// 50 몬스터 한 변 길이
-    monsterSpeed=4,
+    monsterSpeed=2,
 	monsterPosition = 'width', //width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
 	monsterLimitLeftX = 5*standardLength,
 	monsterLimitRightX = 9*standardLength - 50;//몬스터 Width 고려
@@ -67,23 +67,31 @@ function draw() {
    // drawDiamond(diamondImg,[standardLength*(3-1),standardLength*2-diamondLength,diamondLength,diamondLength],0,chdia[0]);
     //drawDiamond(diamondImg,[standardLength*(4-1),standardLength*2-diamondLength,diamondLength,diamondLength],1,chdia[1]);
     //drawDiamond(diamondImg,[standardLength*(5-1),standardLength*2-diamondLength,diamondLength,diamondLength],2,chdia[2]);
-     if(monsterExistence){
-    	drawMonster();
-     }
+     
+     drawMonster();
+    
      if(treasureExistence){
      	drawTreasure(treasureImg,treasurePositionArr);
       }
      
-    
-   // drawCharacter(characterImg,[400,200+30,70,70],true);  
-   // drawCharacter(treasureCloseImg,[400,330,70,70],true);  
+     if(attackExistence){
+    	monsterAttack();
+     }	
+     
+     if(magicBallExistence){
+    	 console.log(magicBallExistence);
+    	 launchMagicBall()
+     }
+     
+ 
 }
+   
+   
 
 function BackgroundDesign(){
-	 ctx.drawImage(design2Img,128,95,32,32,300,300,40,40)
-	 ctx.drawImage(design2Img,128,66,32,30,300,350,40,40)
-	 ctx.drawImage(design2Img,0,67,32,30,300,400,40,40)
-	 ctx.drawImage(design2Img,161,8,30,27,300,450,40,40)
+	 //해골.디자인.앞 4개 고정
+	 ctx.drawImage(design2Img,128,95,32,32,280,280,40,40)
+	
 
 }
 

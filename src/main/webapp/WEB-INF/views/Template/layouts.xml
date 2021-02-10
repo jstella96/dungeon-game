@@ -11,6 +11,7 @@
 	<definition name="layouts" template="/WEB-INF/views/Template/Layouts.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="top" value="/WEB-INF/views/Template/Top.jsp" />
+		<put-attribute name="inventorycss" value="/WEB-INF/views/Template/InventoryCss.jsp" />
 		<!-- 내용은 동적으로 변하기때문에 value에 ""지정 -->
 		<put-attribute name="body" value="" />
 	</definition>

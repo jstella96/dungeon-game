@@ -2,21 +2,97 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <style>
-*{
+*{  font-family: 'Roboto', sans-serif;
     padding :0;
     margin:0;
+    user-select: none;
 }canvas{
     display:block;
     margin : 0 auto;
+}.inventory{
+   width:1160px;
+   background-color: #363742;
+   align-items: center;
+   border: 5px solid #434043;
+   position:relative;
+}.inventory div{
+   display:inline-block;
+   height:66px;
+   margin: 10px;
+   background-color: #5c5064;
+   color: #281f2a
+}.inventory-cell{
+    width:66px;
+}.life-cell{
+    width:200px;
+    position:relative;
+}.life-cell #heartDiv{
+    position:absolute;
+    top:24px;
+    left: 60px;
+    font-size: 25px;
+}.life-cell #heartDiv i{
+	color:#af2e2e;
+}.diamond-cell{
+	width:200px;
+    position:relative;
+}.diamond-cell #gemDiv{
+    position:absolute;
+    top:24px;
+    left: 57px;
+    font-size: 25px;
+}.diamond-cell #gemDiv i{
+	color:#522d8e;
+}#save-cell{
+	background-color: #363742;
+	color:#888888;
+	font-weight: 700;
+}#save-cell span{
+	position:relative;
+}#endBtn{
+	position:absolute;
+	bottom: 2px;
+	right: 2px;
+	color:#888888;
+	font-weight: 700;
+	cursor: pointer;
 }
-
 </style>
 
 <canvas id="myCanvas" width="1170" height="810"></canvas>
-<br>
+
+<center>
+<div class="inventory">
+	<div class="life-cell">Lift<br>
+		<span id="heartDiv">
+			<i class="fa fa-heart"></i> X <span id="lifeCount">10</span>
+		</span>
+	</div>
+	<div class="diamond-cell">diamond<br>
+		<span id="gemDiv">
+			<i class="fas fa-gem"></i> X <span>10</span>
+		</span>
+	</div>		
+	<div class="inventory-cell">item</div>
+	<div class="inventory-cell">item</div>
+	<div class="inventory-cell">item</div>
+	<div class="inventory-cell">item</div>
+	<div class="inventory-cell">item</div>
+	<div class="inventory-cell">item</div>
+	<div id="save-cell">
+	<i class="fa fa-history"></i><span>자동저장 중</span>
+	</div>
+	<span id="endBtn">나가기</span>
+</div>  
+</center>     
+
 <div id='test' style="width:1170px; height:810; background-color: red;"></div>
+
+
 <script>
 //캔버스 사용 설정
+
+
 var canvas = document.getElementById("myCanvas");
 var test = $("#test").html();
 var ctx = canvas.getContext("2d");
@@ -112,6 +188,12 @@ design1Img.src = '<c:url value="/resources/img/map/design1.gif"/>';
 
 var design2Img = new Image;
 design2Img.src = '<c:url value="/resources/img/map/design2.png"/>';
+
+var attackImg = new Image;
+attackImg.src = '<c:url value="/resources/img/map/attack.png"/>';
+
+var magicBallImg = new Image;
+magicBallImg.src = '<c:url value="/resources/img/map/magicBall.png"/>';
 
 
 //디폴트 false 사용하는 페이지에서 true로 전환
@@ -402,21 +484,40 @@ function drawMyCharacter(){
 
     } 
 }
-
+monsterLocation = [0,32,30,32]
+var ddddddd =false;
 //몬스터 그리는 메서드, 몬스터 정보는 전역변수로 각 페이지에서 받아 온다, 각 페이지 타일즈 선언으로 인하여. 
+
+var life =10;
 function drawMonster(){
     
     var  monsterWidth=50,
          monsterHeight=50;
-       
+ 	//이런 느낌으로 죽임 처리 하기
+  /*  if(ddddddd){
+    	return;
+    }*/
+    
+    if(magicBallExistence){
+    	if(magicBallLocation[0]>monsterX && magicBallLocation[0]<(monsterX+monsterWidth)
+    				&& magicBallLocation[1]>monsterY&& magicBallLocation[1]<(monsterY+monsterHeight)){
+    		magicBallExistence = false;
+    		console.log("asdasdasdasdas");
+    		ddddddd =true;
+    	}
+    }
+    
      if(monsterPosition == 'width'){   
 	     monsterX += monsterSpeed;
-	     if(monsterX > monsterLimitRightX)
+	     if(monsterX > monsterLimitRightX){
 	       monsterSpeed = -monsterSpeed;
-	     if(monsterX < monsterLimitLeftX)
+	       monsterLocation = [0,32,30,32];
+	     }if(monsterX < monsterLimitLeftX){
+	       monsterLocation = [0,64,30,32];
 	       monsterSpeed = -monsterSpeed;
+	     }
      }else if(monsterPosition == 'height'){
-	     monsterY += monsterSpeed;
+	      monsterY += monsterSpeed;
 	     if(monsterY > monsterLimitTopY)
 	         monsterSpeed = -monsterSpeed;
 	     if(monsterY < monsterLimitBottomY)
@@ -426,26 +527,39 @@ function drawMonster(){
     	 return;
      }
    
-     ctx.drawImage(monsterImg,monsterX ,monsterY ,monsterWidth,monsterHeight);
+     ctx.drawImage(monsterImg,monsterLocation[0],monsterLocation[1],monsterLocation[2],monsterLocation[3]
+     					,monsterX ,monsterY ,monsterWidth,monsterHeight);
      
      //몬스터와 충돌할 시에 50칸 뒤로 물러나고, 일정시간 배경이 암전된다.
      var state = targetCrash(monsterX ,monsterY,monsterWidth,monsterHeight);
   	 if(state != null){
-		switch (state){
+  		 //공격 당한후 0.5 초 동안 타격을 받지 않도록
+  		 if(!attackExistence){
+  			life = life -1;
+  			//$("lifeCount").html(life)
+  			//console.log($("#lifeCount").html())
+  			$("#lifeCount").html(life)
+	  		attackExistence =true;
+	  		monsterAttackTimeCheck();
+	  		console.log("살려줘");
+  		 }	 
+  		 switch (state){
    		    case 'left':
-   		    	myCharacterX -= 50;
+   		    	myCharacterX -= 60;
+   		    	
              //	LanternCheck = true;
    		        break;
    		    case 'rigth':
-	   		    myCharacterX += 50;
+	   		    myCharacterX += 60;
+	   		    
 	          //  LanternCheck = true;
    		        break;
    		    case 'top':
-   		    	myCharacterY += 50;
+   		    	myCharacterY += 60;
    	         //   LanternCheck = true;
    		        break;
    		    case 'bottom':
-   		    	myCharacterY -= 50;
+   		    	myCharacterY -= 60;
    	         //   LanternCheck = true;
    		        break;
    		    default :
@@ -478,7 +592,7 @@ function keyDownHandler(e) {
     else if(e.keyCode == 38) {
           upPressed = true;
     }
-       
+    
 }
 
 function keyUpHandler(e) {
@@ -495,6 +609,70 @@ function keyUpHandler(e) {
          upPressed = false;
    }
 }
+$(document).keydown(function(e){
+    //컨트롤 누르고 엔터
+	if(e.which == 39 && e.ctrlKey){
+		console.log("sadasdad");
+		if(!magicBallExistence){
+		magicBallLocation =[myCharacterX+50,myCharacterY+20,30,30]
+		magicBallExistence =true;
+		magicballTimeCheck()
+		}
+
+	}else if(e.which == 37 & e.ctrlKey){
+		 
+	}else if(e.which == 40 & e.ctrlKey){
+		
+	}else if(e.which == 38 & e.ctrlKey){
+		 
+	}
+});
+
+
+//
+var magicBallExistence =false;
+var magicBallLocation =[myCharacterX+50,myCharacterY+20,30,30]
+var magicBallXspeed = 3;
+var magicBallYspeed = -3;
+
+
+function launchMagicBall(){
+	magicBallLocation[0] = magicBallLocation[0]+magicBallXspeed;
+	ctx.drawImage(magicBallImg,magicBallLocation[0],magicBallLocation[1],magicBallLocation[2],magicBallLocation[3]);
+}
+
+function  magicballTimeCheck(){
+	
+	setTimeout(function() {
+		  console.log('check');
+		 
+		  magicBallExistence =false;  
+		  console.log(magicBallExistence);
+	}, 2000);
+	
+}
+
+
+var attackExistence =false;
+var attackLocation = [myCharacterX-3,myCharacterY-3,30,30]
+
+
+function monsterAttack(){
+	  attackLocation = [myCharacterX-3,myCharacterY-3,30,30]
+	  ctx.drawImage(attackImg,attackLocation[0],attackLocation[1],attackLocation[2],attackLocation[3]);
+}
+
+function  monsterAttackTimeCheck(){
+	
+	setTimeout(function() {
+		
+		  attackExistence =false;
+	}, 400);
+}
+
+
+
+
 //인터벌. 0.01초단위로 그림이 그려짐
 
 
@@ -515,6 +693,7 @@ function drawBackground(backgroundImg){
 	    }
 	}
 }
+
 
 //다이아몬드 true/false 상채
 var diamondState = [];
