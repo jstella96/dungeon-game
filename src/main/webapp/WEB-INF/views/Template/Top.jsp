@@ -68,7 +68,7 @@
 			<i class="fa fa-heart"></i> X <span id="lifeCount">10</span>
 		</span>
 	</div>
-	<div class="diamond-cell">diamond<br>
+	<div class="diamond-cell">Diamond<br>
 		<span id="gemDiv">
 			<i class="fas fa-gem"></i> X <span>10</span>
 		</span>
@@ -430,6 +430,14 @@ function drawBrick(brickImg,positionArr,crash_Or_NoCrash) {
         
            if(positionArr[h].includes(w)){
                 ctx.drawImage(brickImg,brickX ,brickY ,standardLength,standardLength);
+                //매직 볼 충격 검사
+                if(magicBallExistence){
+                	if(magicBallLocation[0]>brickX && magicBallLocation[0]<(brickX +standardLength)
+                				&& magicBallLocation[1]>brickY&& magicBallLocation[1]<(brickY +standardLength)){
+                		magicBallExistence = false;
+                		console.log("asdasdasdasdas");
+                	}
+                }
                 if(crash_Or_NoCrash){
                 	var state = targetCrash(brickX ,brickY,brickWidth,brickHeight);
                 	if(state != null){
@@ -500,10 +508,9 @@ function drawMonster(){
     
     if(magicBallExistence){
     	if(magicBallLocation[0]>monsterX && magicBallLocation[0]<(monsterX+monsterWidth)
-    				&& magicBallLocation[1]>monsterY&& magicBallLocation[1]<(monsterY+monsterHeight)){
+    				&& magicBallLocation[1] > (monsterY-magicBallLocation[3]) && magicBallLocation[1]<(monsterY+monsterHeight)){
     		magicBallExistence = false;
-    		console.log("asdasdasdasdas");
-    		ddddddd =true;
+    		console.log("볼에 몬스터가 맞았다.");
     	}
     }
     
@@ -614,7 +621,7 @@ $(document).keydown(function(e){
 	if(e.which == 39 && e.ctrlKey){
 		console.log("sadasdad");
 		if(!magicBallExistence){
-		magicBallLocation =[myCharacterX+50,myCharacterY+20,30,30]
+		magicBallLocation =[myCharacterX+50,myCharacterY+10,30,30]
 		magicBallExistence =true;
 		magicballTimeCheck()
 		}
@@ -638,7 +645,7 @@ var magicBallYspeed = -3;
 
 function launchMagicBall(){
 	magicBallLocation[0] = magicBallLocation[0]+magicBallXspeed;
-	ctx.drawImage(magicBallImg,magicBallLocation[0],magicBallLocation[1],magicBallLocation[2],magicBallLocation[3]);
+	ctx.drawImage(magicBallImg,magicBallLocation[0],magicBallLocation[1],magicBallLocation[2],magicBallLocation[3]);	
 }
 
 function  magicballTimeCheck(){
