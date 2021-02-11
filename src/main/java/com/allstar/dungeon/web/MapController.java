@@ -22,52 +22,6 @@ public class MapController {
 	private SqlSessionTemplate sqlMapper;
 	
 	
-	//로그인 페이지로 이동
-	@RequestMapping(value = "login", method = RequestMethod.GET)
-	public String gameLogin() {
-		return "Map/Login";
-	}
-	//로그인 확인 후, 게임시작
-	@RequestMapping(value = "login", method = RequestMethod.POST)
-	public String gameLoginTry(@RequestParam Map map,Model model,HttpServletRequest req) {
-		//유효성 체크
-		int memberCheck = sqlMapper.selectOne("memberLoginCheck",map);
-		if(memberCheck == 0) {
-			//리턴. 에러 발생.
-		}
-		req.getSession().setAttribute("member_Id", map.get("id"));
-		
-		
-		//데이터에서 이전 위치 기록 받아오기
-		Map memberGameInfo = sqlMapper.selectOne("memberInfoCall",map);
-		
-		model.addAttribute("page",memberGameInfo.get("map"));
-		model.addAttribute("x",memberGameInfo.get("x"));
-		model.addAttribute("y",memberGameInfo.get("y"));
-		
-		//map에 따른 사용자의 다이아몬드 습득 정보 가져오기
-		map.put("page",memberGameInfo.get("map"));
-		List<Map> list = sqlMapper.selectList("dungeonDiamondSelect", map);
-		model.addAttribute("diaList",list);
-		
-		
-		System.out.println(String.format("Map/Map%d.dungeon",memberGameInfo.get("map")));
-		
-		return String.format("Map/Map%d.dungeon",memberGameInfo.get("map"));
-	}
-	
-	@RequestMapping(value = "Join", method = RequestMethod.POST)
-	public String gameJoin(@RequestParam Map map) {
-	
-		int memberCheck = sqlMapper.selectOne("memberLoginCheck",map);
-		if(memberCheck == 0) {
-			 sqlMapper.insert("memberInsert",map);
-		}
-		
-		return "Map/Login";
-	}
-	
-	
 	@RequestMapping("change")
 	public String mapChange(@RequestParam Map map,Model model,HttpServletRequest req) {
 		

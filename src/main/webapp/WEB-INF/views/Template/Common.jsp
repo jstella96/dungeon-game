@@ -80,7 +80,7 @@
 	<div class="inventory-cell">item</div>
 	<div class="inventory-cell">item</div>
 	<div id="save-cell">
-	<i class="fa fa-history"></i><span>자동저장 중</span>
+	<i class="fa fa-history"></i><span>자동저장 중</span><br>
 	</div>
 	<span id="endBtn">나가기</span>
 </div>  
@@ -195,6 +195,9 @@ attackImg.src = '<c:url value="/resources/img/map/attack.png"/>';
 var magicBallImg = new Image;
 magicBallImg.src = '<c:url value="/resources/img/map/magicBall.png"/>';
 
+
+var bloodImg = new Image;
+bloodImg.src = '<c:url value="/resources/img/map/blood.png"/>';
 
 //디폴트 false 사용하는 페이지에서 true로 전환
 var monsterExistence = false;
@@ -497,6 +500,12 @@ var ddddddd =false;
 //몬스터 그리는 메서드, 몬스터 정보는 전역변수로 각 페이지에서 받아 온다, 각 페이지 타일즈 선언으로 인하여. 
 
 var life =10;
+
+var monsterLife = 2;
+//레벨 별 몬스터 생명 수
+var levelMonsterLife = [2,3,4,5];
+
+
 function drawMonster(){
     
     var  monsterWidth=50,
@@ -505,14 +514,27 @@ function drawMonster(){
   /*  if(ddddddd){
     	return;
     }*/
+    var remainingLife=levelMonsterLife[0]-(levelMonsterLife[0] - monsterLife);
+    var percentageOfLife = remainingLife / levelMonsterLife[0] * 50
+    
+    
+
+	ctx.fillStyle = "#000000";
+    ctx.fillRect(monsterX,monsterY-20, 50, 5)
+    ctx.fillStyle = "#af2e2e";
+    ctx.fillRect(monsterX,monsterY-20, percentageOfLife, 5)
     
     if(magicBallExistence){
     	if(magicBallLocation[0]>monsterX && magicBallLocation[0]<(monsterX+monsterWidth)
     				&& magicBallLocation[1] > (monsterY-magicBallLocation[3]) && magicBallLocation[1]<(monsterY+monsterHeight)){
     		magicBallExistence = false;
     		console.log("볼에 몬스터가 맞았다.");
+    		monsterLife =monsterLife-1;
+    		monsterX += 50;
     	}
     }
+    
+   
     
      if(monsterPosition == 'width'){   
 	     monsterX += monsterSpeed;
@@ -537,6 +559,7 @@ function drawMonster(){
      ctx.drawImage(monsterImg,monsterLocation[0],monsterLocation[1],monsterLocation[2],monsterLocation[3]
      					,monsterX ,monsterY ,monsterWidth,monsterHeight);
      
+     ctx.drawImage(bloodImg,monsterX+5,monsterY+5,40,40);
      //몬스터와 충돌할 시에 50칸 뒤로 물러나고, 일정시간 배경이 암전된다.
      var state = targetCrash(monsterX ,monsterY,monsterWidth,monsterHeight);
   	 if(state != null){
@@ -574,7 +597,6 @@ function drawMonster(){
 		}//switch()    
 	}//if() 
 }//drawMonster()
-
 
 
 

@@ -8,7 +8,8 @@
 <configuration>
 
 	<typeAliases>
-		
+		<typeAlias alias="memberDTO"
+			type="com.allstar.dungeon.dto.MemberDTO" />
 	</typeAliases>
 
  	<mappers>
