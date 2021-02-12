@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace속성:매퍼파일의 완전한경로 .xml는 생략 -->
+
+<mapper namespace="com.allstar.dungeon.mybatis.membermove">
+	
+	<resultMap type="memberDTO" id="memberDTOResult">
+			<result property="id" column="member_id"/>
+			<result property="password" column="member_password"/>
+			<result property="lastSave" column="member_lastsave"/>
+			<result property="life" column="member_life"/>
+			<result property="map" column="member_map"/>
+			<result property="x" column="member_x"/>
+			<result property="y" column="member_y"/>
+	</resultMap>
+	
+	
+	<select id="selectMember" parameterType="String" resultMap="memberDTOResult">
+		SELECT *,(SELECT count(*) FROM diamond_get WHERE member_id =#{id}) AS diamond_count,
+			(SELECT count(*) FROM red_diamond_get WHERE member_id =#{id}) AS red_diamond_count 
+			from member WHERE member_id =#{id}
+	</select>
+	
+	<!-- 생명, 맵이동(lastsave, x,y, map)  -->
+	<update id="updateMember" parameterType="java.util.Map">
+		UPDATE member SET member_map=#{page}, member_x =#{x}, member_y =#{y},
+			 member_lastsave = now(),member_life=#{life} WHERE  member_id=#{id}
+	</update>
+
+	
+</mapper>

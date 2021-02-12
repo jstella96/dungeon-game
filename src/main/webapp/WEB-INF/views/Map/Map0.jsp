@@ -37,7 +37,7 @@ var timeCount = 0;
 var noticExistence = false;
 var LanternCheck = true;
 //Member 테이블 체크해서 재생여부 판단.
-var prologExistence = true;
+var prologExistence = false;
 
 
 /*시작위치 */

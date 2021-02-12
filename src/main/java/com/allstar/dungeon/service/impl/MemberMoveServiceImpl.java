@@ -1,5 +1,7 @@
 package com.allstar.dungeon.service.impl;
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -18,5 +20,10 @@ public class MemberMoveServiceImpl implements MemberMoveService{
 	public MemberDTO findMemberInfo(String id) {
 		//회원정보 반환
 		return dao.selectMember(id);
+	}
+
+	@Override
+	public void modifyMemberInfo(Map map) {
+		dao.updateMember(map);
 	}
 }

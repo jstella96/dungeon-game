@@ -22,8 +22,6 @@ import com.allstar.dungeon.service.MemberMoveService;
 public class MemberController {
 	
 
-	@Resource(name = "memberMoveService")
-	private MemberMoveService moveService;
 	
 	@Resource(name = "memberLoginService")
 	private MemberLoginService loginService;
@@ -38,29 +36,13 @@ public class MemberController {
 	//2]로그인 확인 후, 게임시작
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String gameLogin(@RequestParam Map map, Model model, HttpServletRequest req,RedirectAttributes attr) {
-		System.out.println(map.size());
+		
 		boolean memberCheck = loginService.isMember(map);
-		System.out.println(memberCheck);
+		
 		if(memberCheck) {
 			req.getSession().setAttribute("memberId", map.get("id"));
 			
-			
-			//데이터에서 이전 위치 기록 받아오기
-			MemberDTO memberDto = moveService.findMemberInfo(map.get("id").toString());
-			
-			model.addAttribute("page",memberDto.getMap());
-			model.addAttribute("x",memberDto.getX());
-			model.addAttribute("y",memberDto.getY());
-			
-			//map에 따른 사용자의 다이아몬드 습득 정보 가져오기
-			//map.put("page",memberGameInfo.get("map"));
-			//List<Map> list = sqlMapper.selectList("dungeonDiamondSelect", map);
-			//model.addAttribute("diaList",list);
-			
-			
-			System.out.println(String.format("Map/Map%d.dungeon", memberDto.getMap()));
-			
-			return String.format("Map/Map%d.dungeon",memberDto.getMap());
+			return "redirect:/map/page";
 		}else {
 			attr.addFlashAttribute("error","존재하지 않는 아이디 입니다.");
 			return "redirect:/login";

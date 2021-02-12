@@ -14,19 +14,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.allstar.dungeon.dto.MemberDTO;
+import com.allstar.dungeon.service.MemberMoveService;
+
 @Controller
 @RequestMapping("/map/")
 public class MapController {
 
 	@Resource(name="sqlSessoinTemplate")
 	private SqlSessionTemplate sqlMapper;
-	
+
+	@Resource(name = "memberMoveService")
+	private MemberMoveService moveService;
 	
 	@RequestMapping("change")
 	public String mapChange(@RequestParam Map map,Model model,HttpServletRequest req) {
 		
-		String member_Id= req.getSession().getAttribute("member_Id").toString();
-		map.put("id",member_Id);
+		String memberId= req.getSession().getAttribute("memberId").toString();
+		map.put("id",memberId);
 		
 		
 		int afterPage=1;
@@ -56,15 +61,38 @@ public class MapController {
 		map.put("page",afterPage);
 		map.put("x",x);
 		map.put("y",y);
+		map.put("life",3);
+		
+		//List<Map> list = sqlMapper.selectList("dungeonDiamondSelect", map);
+		//model.addAttribute("diaList",list);
 		
 		
-		List<Map> list = sqlMapper.selectList("dungeonDiamondSelect", map);
-		model.addAttribute("diaList",list);
-		
-		
-		sqlMapper.update("CharacterLocationUpdate",map);
+		moveService.modifyMemberInfo(map);
 		return String.format("Map/Map%d.dungeon", afterPage);
 	}
+	
+	@RequestMapping("page")
+	public String mapMove(Model model,HttpServletRequest req) {
+		
+		String memberId= req.getSession().getAttribute("memberId").toString();
+				
+		MemberDTO memberDto = moveService.findMemberInfo(memberId);
+		model.addAttribute("page",memberDto.getMap());
+		model.addAttribute("x",memberDto.getX());
+		model.addAttribute("y",memberDto.getY());
+		
+		//map에 따른 사용자의 다이아몬드 습득 정보 가져오기
+		//map.put("page",memberGameInfo.get("map"));
+		//List<Map> list = sqlMapper.selectList("dungeonDiamondSelect", map);
+		//model.addAttribute("diaList",list);
+
+		return String.format("Map/Map%d.dungeon",memberDto.getMap());
+
+	}
+	
+	
+	
+	
 	
 	//diamond get
 	@RequestMapping(value="diamond",produces = "text/html; charset=UTF-8")

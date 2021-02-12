@@ -4,52 +4,25 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace속성:매퍼파일의 완전한경로 .xml는 생략 -->
 
-<mapper namespace="com.allstar.dungeon.mybatis.dungeon">
+<mapper namespace="com.allstar.dungeon.mybatis.member">
 	
-	<resultMap type="memberDTO" id="memberDTOResult">
-			<result property="id" column="member_id"/>
-			<result property="password" column="member_password"/>
-			<result property="lastSave" column="member_lastsave"/>
-			<result property="life" column="member_life"/>
-			<result property="map" column="member_map"/>
-			<result property="x" column="member_x"/>
-			<result property="y" column="member_y"/>
-	</resultMap>
 	
+	<select id="selectMemberId" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM member WHERE member_id=#{id}  
+	</select>
 	
 	<insert id="insertMember" parameterType="java.util.Map">
 		INSERT INTO member VALUES(#{id},#{password}, now(),10,0,180,520)
 	</insert>
 	
-	<!-- 생명, 맵이동(lastsave, x,y, map)  -->
-	<update id="updateMember" parameterType="java.util.Map">
-		UPDATE member SET 
-		<choose>
-			<when test="map != null">
-			    member_map=#{map} and member_x =#{x} and member_y =#{y} and member_lastsave = now()
-			</when>
-			<otherwise>
-				member_life=#{life}
-			</otherwise>
-		</choose>
-		WHERE  member_id=#{id}
-	</update>
+	<select id="selectMemberLoginCheck" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) FROM member WHERE member_id=#{id} AND member_password=#{password}
+	</select>
 	
 	<delete id="deleteMember" parameterType="String">
 		DELETE FROM member WHERE member_id=#{id}
 	</delete>
 	
-	<select id="selectMember" parameterType="String" resultMap="memberDTOResult">
-		SELECT * FROM member WHERE member_id=#{id}
-	</select>
-
-	<select id="selectMemberLoginCheck" parameterType="java.util.Map" resultType="int">
-		SELECT COUNT(*) FROM member WHERE member_id=#{id} AND member_password=#{password}
-	</select>
-	
-	<select id="selectMemberId" parameterType="String" resultType="int">
-		SELECT COUNT(*) FROM member WHERE member_id=#{id}
-	</select>
 
 	
 </mapper>
