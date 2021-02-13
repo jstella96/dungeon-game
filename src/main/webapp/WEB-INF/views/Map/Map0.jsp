@@ -86,12 +86,10 @@ function BackgroundDesign(){
 }
 
 
-//0]프롤로그 실행 함수. timeCount를 이용해 시나리오를 만든다.
+//0]event 1번 : 프롤로그 실행 함수. timeCount를 이용해 시나리오를 만든다.
 function playProlog(){
-	
     //0-0]시간의 흐름을 체크해주는 카운트
     timeCount++;
-    
     //0-1]시나리오 중 렌턴을 습득할 때까지(flase) 렌턴은 그려지는 상태로 있다.
     if(LanternCheck){
     	Lantern(); 

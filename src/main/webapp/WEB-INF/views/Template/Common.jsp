@@ -65,12 +65,12 @@
 <div class="inventory">
 	<div class="life-cell">Lift<br>
 		<span id="heartDiv">
-			<i class="fa fa-heart"></i> X <span id="lifeCount">10</span>
+			<i class="fa fa-heart"></i> X <span id="lifeCount">${memberDto.life}</span>
 		</span>
 	</div>
 	<div class="diamond-cell">Diamond<br>
 		<span id="gemDiv">
-			<i class="fas fa-gem"></i> X <span>10</span>
+			<i class="fas fa-gem"></i> X <span>${memberDto.diamondCount}</span>
 		</span>
 	</div>		
 	<div class="inventory-cell">item</div>
@@ -117,9 +117,9 @@ var characterHeight=60;
 //캐릭터 시작 위치/start
 var myCharacterX=95;
 var myCharacterY=630;
-<c:if test="${!empty x}">
-	var x= ${x};
-	var y= ${y};
+
+	var x= ${memberDto.x};
+	var y= ${memberDto.y};
 	
 	if(y==0){
 		myCharacterX=standardLength*x;
@@ -135,7 +135,7 @@ var myCharacterY=630;
 		myCharacterY=standardLength*y;	
 	}
 	
-</c:if>
+
 
 
 //캐릭터 스피드
@@ -219,7 +219,7 @@ function mapChange(){
                  if(standardLength * w <= myCharacterX &&myCharacterX <=standardLength*(w+1) && 
                      0 <= myCharacterY  && myCharacterY<=(standardLength-characterHeight)){
                         console.log('상단'+h+'행'+w) //h=0 상단
-                        location.href="<c:url value='/map/change?x="+w+"&y="+h+"&page=${page}'/>";
+                        location.href="<c:url value='/map/change?x="+w+"&y="+h+"&page=${memberDto.map}&life="+life+"'/>";
                      }
               }
                if(h==8){
@@ -227,15 +227,15 @@ function mapChange(){
                 if(standardLength * w <= myCharacterX &&myCharacterX <=standardLength*(w+1) && 
                 (standardLength*9-characterHeight) <= myCharacterY  && myCharacterY<=standardLength*9){
                         console.log('하단'+h+'행'+w) //h=0 상단
-                        location.href="<c:url value='/map/change?x="+w+"&y="+h+"&page=${page}'/>";
-                     }
+                        location.href="<c:url value='/map/change?x="+w+"&y="+h+"&page=${memberDto.map}&life="+life+"'/>";
+                      }
                }
                if(w==0){
                 
                 if(  0 <= myCharacterX && myCharacterX <= (standardLength-characterWidth) && 
                  standardLength * h <= myCharacterY  && myCharacterY<=standardLength*(h+1)){
                         console.log('왼단'+h+'행'+w) //h=0 상단
-                        location.href="<c:url value='/map/change?x="+w+"&y="+h+"&page=${page}'/>";
+                        location.href="<c:url value='/map/change?x="+w+"&y="+h+"&page=${memberDto.map}&life="+life+"'/>";
                      }
 
                 }
@@ -243,7 +243,7 @@ function mapChange(){
                 if(  (standardLength*13-characterHeight) <= myCharacterX && myCharacterX <= standardLength*13 && 
                  standardLength * h <= myCharacterY  && myCharacterY<=standardLength*(h+1)){
                         console.log('오른단'+h+'행'+w) //h=0 상단
-                        location.href="<c:url value='/map/change?x="+w+"&y="+h+"&page=${page}'/>";
+                        location.href="<c:url value='/map/change?x="+w+"&y="+h+"&page=${memberDto.map}&life="+life+"'/>";
                      }
                }
             }
@@ -495,73 +495,86 @@ function drawMyCharacter(){
 
     } 
 }
-monsterLocation = [0,32,30,32]
+
 var ddddddd =false;
 //몬스터 그리는 메서드, 몬스터 정보는 전역변수로 각 페이지에서 받아 온다, 각 페이지 타일즈 선언으로 인하여. 
 
-var life =10;
-
-var monsterLife = 2;
-//레벨 별 몬스터 생명 수
-var levelMonsterLife = [2,3,4,5];
+var life =${memberDto.life};
 
 
-function drawMonster(){
+
+//몬스터 죽었을때 실행: 피,시체,아이템 떨군다.
+function monsterDieMotion(no){
+	ctx.drawImage(design2Img,128,95,32,32,monsterX[no] ,monsterY[no],40,40)
+    ctx.drawImage(bloodImg,monsterX[no]+5,monsterY[no]+5,40,40);
+   
+}
+
+
+
+function drawMonster(no){
     
     var  monsterWidth=50,
          monsterHeight=50;
- 	//이런 느낌으로 죽임 처리 하기
-  /*  if(ddddddd){
+ 	//몬스터 레벨에따라 생명령 다르게
+    var remainingLife=levelMonsterLife[no]-(levelMonsterLife[no] - monsterLife[no]);
+    if (remainingLife==0){
+    	monsterDieMotion(no);
     	return;
-    }*/
-    var remainingLife=levelMonsterLife[0]-(levelMonsterLife[0] - monsterLife);
-    var percentageOfLife = remainingLife / levelMonsterLife[0] * 50
-    
-    
+    }
+    var percentageOfLife = remainingLife / levelMonsterLife[no] * 50
 
 	ctx.fillStyle = "#000000";
-    ctx.fillRect(monsterX,monsterY-20, 50, 5)
+    ctx.fillRect(monsterX[no],monsterY[no]-20, 50, 5)
     ctx.fillStyle = "#af2e2e";
-    ctx.fillRect(monsterX,monsterY-20, percentageOfLife, 5)
+    ctx.fillRect(monsterX[no],monsterY[no]-20, percentageOfLife, 5)
     
     if(magicBallExistence){
-    	if(magicBallLocation[0]>monsterX && magicBallLocation[0]<(monsterX+monsterWidth)
-    				&& magicBallLocation[1] > (monsterY-magicBallLocation[3]) && magicBallLocation[1]<(monsterY+monsterHeight)){
+    	if(magicBallLocation[0]>monsterX[no] && magicBallLocation[0]<(monsterX[no]+monsterWidth)
+    				&& magicBallLocation[1] > (monsterY[no]-magicBallLocation[3]) && magicBallLocation[1]<(monsterY[no]+monsterHeight)){
     		magicBallExistence = false;
     		console.log("볼에 몬스터가 맞았다.");
-    		monsterLife =monsterLife-1;
-    		monsterX += 50;
+    		monsterLife[no] =monsterLife[no]-1;
+    		if(magicBallAttackdirection == "right"){
+    			monsterX[no] += 50;
+    		}else if(magicBallAttackdirection == "left"){
+    			monsterX[no] -= 50;
+    		}else if(magicBallAttackdirection == "up"){
+    			monsterY[no] -= 50;
+    		}else{
+    			monsterY[no] += 50;
+    		}
     	}
     }
     
    
     
-     if(monsterPosition == 'width'){   
-	     monsterX += monsterSpeed;
-	     if(monsterX > monsterLimitRightX){
-	       monsterSpeed = -monsterSpeed;
-	       monsterLocation = [0,32,30,32];
-	     }if(monsterX < monsterLimitLeftX){
-	       monsterLocation = [0,64,30,32];
-	       monsterSpeed = -monsterSpeed;
+     if(monsterPosition[no] == 'width'){   
+	     monsterX[no] += monsterSpeed[no];
+	     if(monsterX[no] > monsterLimitRightX[no]){
+	       monsterSpeed[no] = -2;
+	       monsterLocation[no] = [0,32,30,32];
+	     }if(monsterX[no] < monsterLimitLeftX[no]){
+	       monsterLocation[no] = [0,64,30,32];
+	       monsterSpeed[no] = 2;
 	     }
-     }else if(monsterPosition == 'height'){
-	      monsterY += monsterSpeed;
-	     if(monsterY > monsterLimitTopY)
-	         monsterSpeed = -monsterSpeed;
-	     if(monsterY < monsterLimitBottomY)
-	         monsterSpeed = -monsterSpeed;
+     }else if(monsterPosition[no] == 'height'){
+	      monsterY[no] += monsterSpeed[no];
+	     if(monsterY[no] > monsterLimitTopY[no])
+	         monsterSpeed[no] = -2;
+	     if(monsterY[no] < monsterLimitBottomY[no])
+	         monsterSpeed[no] = 2;
      }else{
     	 console.log('drawMonster() error')
     	 return;
      }
    
-     ctx.drawImage(monsterImg,monsterLocation[0],monsterLocation[1],monsterLocation[2],monsterLocation[3]
-     					,monsterX ,monsterY ,monsterWidth,monsterHeight);
+     ctx.drawImage(monsterImg,monsterLocation[no][0],monsterLocation[no][1],monsterLocation[no][2],monsterLocation[no][3]
+     					,monsterX[no] ,monsterY[no] ,monsterWidth,monsterHeight);
      
-     ctx.drawImage(bloodImg,monsterX+5,monsterY+5,40,40);
+
      //몬스터와 충돌할 시에 50칸 뒤로 물러나고, 일정시간 배경이 암전된다.
-     var state = targetCrash(monsterX ,monsterY,monsterWidth,monsterHeight);
+     var state = targetCrash(monsterX[no] ,monsterY[no],monsterWidth,monsterHeight);
   	 if(state != null){
   		 //공격 당한후 0.5 초 동안 타격을 받지 않도록
   		 if(!attackExistence){
@@ -638,22 +651,47 @@ function keyUpHandler(e) {
          upPressed = false;
    }
 }
+
+var magicBallDiameter = 30;
+var magicBallAttackdirection ="";
 $(document).keydown(function(e){
     //컨트롤 누르고 엔터
 	if(e.which == 39 && e.ctrlKey){
-		console.log("sadasdad");
 		if(!magicBallExistence){
-		magicBallLocation =[myCharacterX+50,myCharacterY+10,30,30]
-		magicBallExistence =true;
-		magicballTimeCheck()
+			magicBallAttackdirection = "right";	
+			magicBallLocation =[myCharacterX+characterWidth,myCharacterY+(characterHeight/2)-(magicBallDiameter/2),30,30]
+			magicBallXspeed = 3;
+			magicBallYspeed = 0;
+			magicBallExistence =true;
+			magicballTimeCheck()
 		}
-
 	}else if(e.which == 37 & e.ctrlKey){
-		 
+		if(!magicBallExistence){
+			magicBallAttackdirection = "left";
+			magicBallLocation =[myCharacterX,myCharacterY+(characterHeight/2)-(magicBallDiameter/2),30,30]
+			magicBallXspeed = -3;
+			magicBallYspeed = 0;
+			magicBallExistence =true;
+			magicballTimeCheck()
+			}
 	}else if(e.which == 40 & e.ctrlKey){
-		
+		if(!magicBallExistence){
+			magicBallAttackdirection = "down";
+			magicBallLocation =[myCharacterX+(characterWidth/2)-(magicBallDiameter/2),myCharacterY+characterHeight,30,30]
+			magicBallXspeed = 0;
+			magicBallYspeed = 3;
+			magicBallExistence =true;
+			magicballTimeCheck()
+			}
 	}else if(e.which == 38 & e.ctrlKey){
-		 
+		if(!magicBallExistence){
+			magicBallAttackdirection = "up";
+			magicBallLocation =[myCharacterX+(characterWidth/2)-(magicBallDiameter/2),myCharacterY,30,30]
+			magicBallXspeed = 0;
+			magicBallYspeed = -3;
+			magicBallExistence =true;
+			magicballTimeCheck()
+			}
 	}
 });
 
@@ -662,11 +700,12 @@ $(document).keydown(function(e){
 var magicBallExistence =false;
 var magicBallLocation =[myCharacterX+50,myCharacterY+20,30,30]
 var magicBallXspeed = 3;
-var magicBallYspeed = -3;
+var magicBallYspeed = 0;
 
 
 function launchMagicBall(){
 	magicBallLocation[0] = magicBallLocation[0]+magicBallXspeed;
+	magicBallLocation[1] = magicBallLocation[1]+magicBallYspeed;
 	ctx.drawImage(magicBallImg,magicBallLocation[0],magicBallLocation[1],magicBallLocation[2],magicBallLocation[3]);	
 }
 

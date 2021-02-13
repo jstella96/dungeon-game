@@ -15,7 +15,7 @@ BrickPositionArr = [
                    [0,2,4,6,8,10],
                    [0,2,4,6,7,8,10,12],
                    [0,4,10,12],
-                   [2,4,5,6,8,9,10,12],
+                   [2,4,5,6,7,8,9,10,12],
                    [0,1,2],
                    [0,1,2,3,4,5,6,7,8,9,10,11,12]
                 ]; 
@@ -23,14 +23,23 @@ BrickPositionArr = [
 
 //몬스터 필수 값 
 
-var monsterX=5*standardLength,
-    monsterY=8*standardLength-50,// 50 몬스터 한 변 길이
-    monsterSpeed=2,
-	monsterPosition = 'width', //width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
-	monsterLimitLeftX = 5*standardLength,
-	monsterLimitRightX = 9*standardLength - 50;//몬스터 Width 고려
+var monsterX=[5*standardLength],
+    monsterY=[8*standardLength-50],// 50 몬스터 한 변 길이
+    monsterSpeed=[2],
+	monsterPosition = ['width'], //width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
+	monsterLimitLeftX = [5*standardLength],
+	monsterLimitRightX = [9*standardLength - 50];
+//레벨 별 몬스터 생명 수
+var levelMonsterLife = [5,3,4,5];
+var monsterLocation = [[0,32,30,32]];
+var monsterLife = [4];	
+	//몬스터 Width 고려
 	//monsterLimitTopY = 5*standardLength,
 	//monsterLimitBottomY = 9*standardLength - 50;//몬스터 height
+	
+	
+	
+	
 	
 //몬스터 위쪽 아래쪽 반복여부에 따른 
 treasureExistence = true;
@@ -55,7 +64,7 @@ function draw() {
     drawBackground(backgroundImg);
     drawBrick(brickImg,BrickPositionArr,true);
     BackgroundDesign()
-    drawMyCharacter();
+    //drawMyCharacter();
     mapChange();
    
     <c:if test="${!empty diaList}">
@@ -68,8 +77,12 @@ function draw() {
     //drawDiamond(diamondImg,[standardLength*(4-1),standardLength*2-diamondLength,diamondLength,diamondLength],1,chdia[1]);
     //drawDiamond(diamondImg,[standardLength*(5-1),standardLength*2-diamondLength,diamondLength,diamondLength],2,chdia[2]);
      
-     drawMonster();
-    
+     drawMonster(0);
+     
+     
+     drawMyCharacter();
+
+     
      if(treasureExistence){
      	drawTreasure(treasureImg,treasurePositionArr);
       }
@@ -82,11 +95,15 @@ function draw() {
     	 console.log(magicBallExistence);
     	 launchMagicBall()
      }
-     
+     if(life==0){
+    	 clearInterval(drowinterval);
+     }
  
 }
-   
-   
+
+
+fun
+
 
 function BackgroundDesign(){
 	 //해골.디자인.앞 4개 고정
@@ -97,7 +114,7 @@ function BackgroundDesign(){
 
 
 
-var interval = setInterval(draw, 10);
+var drowinterval = setInterval(draw, 10);
 
 </script>
 

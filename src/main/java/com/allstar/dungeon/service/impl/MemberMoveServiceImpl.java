@@ -19,11 +19,15 @@ public class MemberMoveServiceImpl implements MemberMoveService{
 	@Override
 	public MemberDTO findMemberInfo(String id) {
 		//회원정보 반환
-		return dao.selectMember(id);
+		MemberDTO dto =  dao.selectMember(id);
+		int diamondCount = dto.getDiamondCount() + dto.getRedDiamondCount();
+		dto.setDiamondCount(diamondCount); 
+		return dto;
 	}
 
 	@Override
 	public void modifyMemberInfo(Map map) {
 		dao.updateMember(map);
+		
 	}
 }

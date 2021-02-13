@@ -31,8 +31,7 @@ public class MapController {
 	public String mapChange(@RequestParam Map map,Model model,HttpServletRequest req) {
 		
 		String memberId= req.getSession().getAttribute("memberId").toString();
-		map.put("id",memberId);
-		
+	
 		
 		int afterPage=1;
 		
@@ -54,21 +53,16 @@ public class MapController {
 			y=0;
 		}	
 		
-		model.addAttribute("page",afterPage);
-		model.addAttribute("x",x);
-		model.addAttribute("y",y);
-		
+		map.put("id",memberId);
 		map.put("page",afterPage);
 		map.put("x",x);
 		map.put("y",y);
-		map.put("life",3);
-		
-		//List<Map> list = sqlMapper.selectList("dungeonDiamondSelect", map);
-		//model.addAttribute("diaList",list);
 		
 		
 		moveService.modifyMemberInfo(map);
-		return String.format("Map/Map%d.dungeon", afterPage);
+
+		
+		return "redirect:/map/page";
 	}
 	
 	@RequestMapping("page")
@@ -77,10 +71,8 @@ public class MapController {
 		String memberId= req.getSession().getAttribute("memberId").toString();
 				
 		MemberDTO memberDto = moveService.findMemberInfo(memberId);
-		model.addAttribute("page",memberDto.getMap());
-		model.addAttribute("x",memberDto.getX());
-		model.addAttribute("y",memberDto.getY());
-		
+		model.addAttribute("memberDto",memberDto);
+
 		//map에 따른 사용자의 다이아몬드 습득 정보 가져오기
 		//map.put("page",memberGameInfo.get("map"));
 		//List<Map> list = sqlMapper.selectList("dungeonDiamondSelect", map);

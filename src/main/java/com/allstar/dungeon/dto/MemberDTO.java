@@ -14,4 +14,6 @@ public class MemberDTO {
 	int map;
 	int x;
 	int y;
+	int diamondCount;
+	int redDiamondCount;
 }
