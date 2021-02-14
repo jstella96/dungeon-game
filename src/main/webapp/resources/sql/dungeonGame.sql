@@ -89,9 +89,13 @@ CREATE TABLE monster
 (
 	monster_id int NOT NULL AUTO_INCREMENT,
 	monster_level int NOT NULL,
+	monster_life int NOT NULL,
 	monster_map int NOT NULL,
-	monster_x int NOT NULL,
-	monster_y int NOT NULL,
+	monster_min_x int NOT NULL,
+	monster_max_x int,
+	monster_min_y int NOT NULL,
+	monster_max_y int,
+	monster_position varchar(10) NOT NULL,
 	PRIMARY KEY (monster_id)
 );
 
@@ -99,7 +103,9 @@ CREATE TABLE monster
 CREATE TABLE monster_death
 (
 	monster_id int NOT NULL,
-	member_id varchar(50) NOT NULL
+	member_id varchar(50) NOT NULL,
+	monster_x int NOT NULL,
+	monster_y int NOT NULL
 );
 
 

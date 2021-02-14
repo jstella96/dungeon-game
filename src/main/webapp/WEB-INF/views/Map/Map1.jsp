@@ -21,24 +21,73 @@ BrickPositionArr = [
                 ]; 
 
 
-//몬스터 필수 값 
 
+//다이아몬드 true/false 상채
+var diamondState = [];
+var diamondNo = [];
+console.log(diamondState);
+console.log(diamondNo);
+<c:if test="${!empty diamondList}">
+	 <c:forEach var="item" items="${diamondList }">
+	 console.log("??");
+	  diamondState.push(${item.state});
+	  diamondNo.push(${item.no});
+	</c:forEach>
+</c:if>
+
+
+//몬스터 필수 값 , 고정값, location 은 몬스터 레벨따라 바꿀까?
+var monsterWidth=50,
+  monsterHeight=50;
+  
+//레밸따라 로케이션도 바꿔야행...
+
+
+////////////////////////
+
+var monsterX=[],
+	monsterY=[],// 50 몬스터 한 변 길이
+	monsterSpeed=[],
+	monsterPosition = [], //width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
+	monsterLimitStart = [],
+	monsterLimitEnd = [],
+	levelMonster = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+	levelMonsterLife = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+	monsterLife = [],	
+	monsterLocation = [];
+<c:if test="${!empty monsterList}">
+	<c:forEach var="item" items="${monsterList }">
+	
+	monsterX.push(${item.minX}*standardLength);
+	monsterY.push(${item.minY}*standardLength-monsterHeight);
+	monsterSpeed.push(2);
+	monsterPosition.push('${item.position}');//width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
+	monsterLimitStart.push(${item.minX}*standardLength);
+	monsterLimitEnd.push(${item.maxX}*standardLength - monsterWidth);
+	levelMonster.push(${item.level});//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+	levelMonsterLife.push(${item.life});
+	monsterLife.push(${item.life});
+	monsterLocation.push([0,64,30,32]);
+	</c:forEach>
+</c:if>
+
+/*
 var monsterX=[5*standardLength],
-    monsterY=[8*standardLength-50],// 50 몬스터 한 변 길이
+    monsterY=[8*standardLength-monsterHeight],// 50 몬스터 한 변 길이
     monsterSpeed=[2],
 	monsterPosition = ['width'], //width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
-	monsterLimitLeftX = [5*standardLength],
-	monsterLimitRightX = [9*standardLength - 50];
-//레벨 별 몬스터 생명 수
-var levelMonsterLife = [5,3,4,5];
-var monsterLocation = [[0,32,30,32]];
-var monsterLife = [4];	
+	monsterLimitStart = [5*standardLength],
+	monsterLimitEnd = [9*standardLength - monsterWidth];
+//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+var levelMonster = [1];
+var levelMonsterLife = [1];
+var monsterLife = [1];	
 	//몬스터 Width 고려
 	//monsterLimitTopY = 5*standardLength,
 	//monsterLimitBottomY = 9*standardLength - 50;//몬스터 height
 	
 	
-	
+	*/
 	
 	
 //몬스터 위쪽 아래쪽 반복여부에 따른 
@@ -63,7 +112,7 @@ function draw() {
     //2] 바닥에 그려지는 순서 배경 -> 벽 - > 캐릭터 
     drawBackground(backgroundImg);
     drawBrick(brickImg,BrickPositionArr,true);
-    BackgroundDesign()
+    backgroundDesign()
     //drawMyCharacter();
     mapChange();
    
@@ -78,8 +127,8 @@ function draw() {
     //drawDiamond(diamondImg,[standardLength*(5-1),standardLength*2-diamondLength,diamondLength,diamondLength],2,chdia[2]);
      
      drawMonster(0);
-     
-     
+     drawMonster(1);
+     drawMonster(2);
      drawMyCharacter();
 
      
@@ -97,15 +146,51 @@ function draw() {
      }
      if(life==0){
     	 clearInterval(drowinterval);
+    	 endGameInterval = setInterval(endGame, 200);
      }
  
 }
+var endGameInterval;
+var endGameCountDownInterval;
+var endGameTime = 0;
+var endGameCountDownTime =10;
+function endGame(){
+	endGameTime++;
+	ctx.beginPath();
+	ctx.rect(0, 0, canvas.width, endGameTime*standardLength);
+	ctx.fillStyle = "#000000";
+	ctx.fill();
+	ctx.closePath();
+	if(endGameTime==10){
+		clearInterval(endGameInterval);
+		ctx.fillStyle = '#999999';
+	    ctx.font = ' bold 28px Arial, sans-serif';
+	    ctx.fillText("GameOver", 528, 400);
+	    endGameCountDownInterval=setInterval(endGameCountDown, 1000);
+		//10-9-8-7 해서 게임 오버 만들기. 
+	}
+}
+function endGameCountDown(){
+	
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.beginPath();
+	ctx.rect(0, 0, canvas.width, endGameTime*standardLength);
+	ctx.fillStyle = "#000000";
+	ctx.fill();
+	ctx.fillStyle = '#999999';
+    ctx.font = ' bold 28px Arial, sans-serif';
+    ctx.fillText("GameOver", 528, 400);
+    ctx.fillText(endGameCountDownTime, 587, 450);
+    endGameCountDownTime--;
+    if(endGameCountDownTime < 0 ){
+    	clearInterval(endGameCountDownInterval);
+    	console.log("메인 이동");
+    	location.href="<c:url value='/'/>";
+        
+    }
+}
 
-
-fun
-
-
-function BackgroundDesign(){
+function backgroundDesign(){
 	 //해골.디자인.앞 4개 고정
 	 ctx.drawImage(design2Img,128,95,32,32,280,280,40,40)
 	

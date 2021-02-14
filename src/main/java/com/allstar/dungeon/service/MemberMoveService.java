@@ -6,7 +6,7 @@ import com.allstar.dungeon.dto.MemberDTO;
 
 public interface MemberMoveService {
 
-	MemberDTO findMemberInfo(String id);
+	MemberDTO getMember(String id);
 	
-	void modifyMemberInfo(Map map);
+	void modifyMember(Map map);
 }

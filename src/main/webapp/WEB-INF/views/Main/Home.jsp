@@ -23,15 +23,15 @@
     }#startCanvas{
         display:block;
         margin : 0 auto;
-        width : 1235px;
-        height : 855px;
+        width : 1170px;
+        height : 900px;
         background-image: url(<c:url value="/resources/img/map/background2.png"/>);
 	    background-position: center;
 	    background-size: cover;
 	    position: relative;
     }.loginDiv{
    		position: absolute;
-   		top:630px;
+   		top:640px;
    	}.loginDiv input{
    		background-color: #f5f0de
    	}.loginDiv button{
@@ -41,7 +41,7 @@
    		border-radius: 10px;
    		font-weight: 400;
 		font-family: 'Jua', sans-serif;
-		font-size: 21px;
+		font-size: 19px;
 	 }#signModal .modal-dialog{
 	 	top:530px;
 	 	width: 400px;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace속성:매퍼파일의 완전한경로 .xml는 생략 -->
+
+<mapper namespace="com.allstar.dungeon.mybatis.monster">
+	
+	<resultMap type="monsterDTO" id="monsterDTOResult">
+			<result property="id" column="monster_id"/>
+			<result property="level" column="monster_level"/>
+			<result property="life" column="monster_life"/>
+			<result property="map" column="monster_map"/>
+			<result property="minX" column="monster_min_x"/>
+			<result property="maxX" column="monster_max_x"/>
+			<result property="minY" column="monster_min_y"/>
+			<result property="maxY" column="monster_max_y"/>
+			<result property="x" column="monster_x"/>
+			<result property="y" column="monster_y"/>
+			<result property="position" column="monster_position"/>
+	</resultMap>
+	
+	<select id="selectMonsterList" parameterType="java.util.Map" resultMap="monsterDTOResult">
+		
+		SELECT m.monster_id,m.monster_level,m.monster_life,m.monster_map,
+			m.monster_min_x,m.monster_max_x,m.monster_min_y,m.monster_max_y,d.monster_x,d.monster_y,m.monster_position
+			FROM monster m LEFT JOIN (SELECT *FROM monster_death WHERE member_id = #{id}) d
+			ON m.monster_id =d.monster_id where m.monster_map = #{map}
+		 
+	</select>
+	<update id="updateMonsterDeath" parameterType="java.util.Map">
+		UPDATE diamondget SET state='false' WHERE no = ${diamondNumber} and id='${id}'
+	</update>
+
+
+</mapper>

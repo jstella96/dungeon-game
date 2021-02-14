@@ -82,7 +82,7 @@
 	<div id="save-cell">
 	<i class="fa fa-history"></i><span>자동저장 중</span><br>
 	</div>
-	<span id="endBtn">나가기</span>
+	<a style ="text-decoration:none;" href="<c:url value='/'/>" id="endBtn">나가기</a>
 </div>  
 </center>     
 
@@ -514,8 +514,7 @@ function monsterDieMotion(no){
 
 function drawMonster(no){
     
-    var  monsterWidth=50,
-         monsterHeight=50;
+
  	//몬스터 레벨에따라 생명령 다르게
     var remainingLife=levelMonsterLife[no]-(levelMonsterLife[no] - monsterLife[no]);
     if (remainingLife==0){
@@ -551,18 +550,18 @@ function drawMonster(no){
     
      if(monsterPosition[no] == 'width'){   
 	     monsterX[no] += monsterSpeed[no];
-	     if(monsterX[no] > monsterLimitRightX[no]){
+	     if(monsterX[no] > monsterLimitEnd[no]){
 	       monsterSpeed[no] = -2;
 	       monsterLocation[no] = [0,32,30,32];
-	     }if(monsterX[no] < monsterLimitLeftX[no]){
+	     }if(monsterX[no] < monsterLimitStart[no]){
 	       monsterLocation[no] = [0,64,30,32];
 	       monsterSpeed[no] = 2;
 	     }
      }else if(monsterPosition[no] == 'height'){
 	      monsterY[no] += monsterSpeed[no];
-	     if(monsterY[no] > monsterLimitTopY[no])
+	     if(monsterY[no] > monsterLimitEnd[no])
 	         monsterSpeed[no] = -2;
-	     if(monsterY[no] < monsterLimitBottomY[no])
+	     if(monsterY[no] < monsterLimitStart[no])
 	         monsterSpeed[no] = 2;
      }else{
     	 console.log('drawMonster() error')
