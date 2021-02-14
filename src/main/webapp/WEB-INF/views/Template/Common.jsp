@@ -437,6 +437,7 @@ function drawBrick(brickImg,positionArr,crash_Or_NoCrash) {
                 if(magicBallExistence){
                 	if(magicBallLocation[0]>brickX && magicBallLocation[0]<(brickX +standardLength)
                 				&& magicBallLocation[1]>brickY&& magicBallLocation[1]<(brickY +standardLength)){
+                		clearTimeout(magicballTimeout);
                 		magicBallExistence = false;
                 		console.log("asdasdasdasdas");
                 	}
@@ -513,15 +514,19 @@ function monsterDieMotion(no){
 
 
 function drawMonster(no){
-    
-
- 	//몬스터 레벨에따라 생명령 다르게
-    var remainingLife=levelMonsterLife[no]-(levelMonsterLife[no] - monsterLife[no]);
-    if (remainingLife==0){
+	if(monsterDeath[no]){
     	monsterDieMotion(no);
+    	console.log("너가 안뜨는 건 말이 안되 잖아.??")
     	return;
+	}
+	console.log(no,"너ㅁㄴㅇㅁ잖아.??")
+ 	//몬스터 레벨에따라 생명령 다르게
+    var remainingLife=basicMonsterLife[no]-(basicMonsterLife[no] - monsterLife[no]);
+    if (remainingLife <= 0){
+    	monsterDeath[no] = true;
+    	deathMonsterAjax(no);
     }
-    var percentageOfLife = remainingLife / levelMonsterLife[no] * 50
+    var percentageOfLife = remainingLife / basicMonsterLife[no] * 50
 
 	ctx.fillStyle = "#000000";
     ctx.fillRect(monsterX[no],monsterY[no]-20, 50, 5)
@@ -531,6 +536,7 @@ function drawMonster(no){
     if(magicBallExistence){
     	if(magicBallLocation[0]>monsterX[no] && magicBallLocation[0]<(monsterX[no]+monsterWidth)
     				&& magicBallLocation[1] > (monsterY[no]-magicBallLocation[3]) && magicBallLocation[1]<(monsterY[no]+monsterHeight)){
+    		clearTimeout(magicballTimeout);
     		magicBallExistence = false;
     		console.log("볼에 몬스터가 맞았다.");
     		monsterLife[no] =monsterLife[no]-1;
@@ -558,11 +564,15 @@ function drawMonster(no){
 	       monsterSpeed[no] = 2;
 	     }
      }else if(monsterPosition[no] == 'height'){
-	      monsterY[no] += monsterSpeed[no];
-	     if(monsterY[no] > monsterLimitEnd[no])
+    	 
+	       monsterY[no] += monsterSpeed[no];
+	     if(monsterY[no] > monsterLimitEnd[no]){
 	         monsterSpeed[no] = -2;
-	     if(monsterY[no] < monsterLimitStart[no])
+	     	 monsterLocation[no] = [0,96,30,32];
+	     }if(monsterY[no] < monsterLimitStart[no]){
 	         monsterSpeed[no] = 2;
+	    	 monsterLocation[no] = [0,0,30,32];
+	     }
      }else{
     	 console.log('drawMonster() error')
     	 return;
@@ -583,7 +593,6 @@ function drawMonster(no){
   			$("#lifeCount").html(life)
 	  		attackExistence =true;
 	  		monsterAttackTimeCheck();
-	  		console.log("살려줘");
   		 }	 
   		 switch (state){
    		    case 'left':
@@ -655,43 +664,38 @@ var magicBallDiameter = 30;
 var magicBallAttackdirection ="";
 $(document).keydown(function(e){
     //컨트롤 누르고 엔터
-	if(e.which == 39 && e.ctrlKey){
-		if(!magicBallExistence){
-			magicBallAttackdirection = "right";	
-			magicBallLocation =[myCharacterX+characterWidth,myCharacterY+(characterHeight/2)-(magicBallDiameter/2),30,30]
-			magicBallXspeed = 3;
-			magicBallYspeed = 0;
-			magicBallExistence =true;
-			magicballTimeCheck()
+    if(!magicBallExistence){
+		if(e.which == 39 && e.ctrlKey){
+				magicBallAttackdirection = "right";	
+				magicBallLocation =[myCharacterX+characterWidth,myCharacterY+(characterHeight/2)-(magicBallDiameter/2),30,30]
+				magicBallXspeed = 3;
+				magicBallYspeed = 0;
+				magicBallExistence =true;
+				magicballTimeCheck()
+			
+		}else if(e.which == 37 & e.ctrlKey){
+				magicBallAttackdirection = "left";
+				magicBallLocation =[myCharacterX,myCharacterY+(characterHeight/2)-(magicBallDiameter/2),30,30]
+				magicBallXspeed = -3;
+				magicBallYspeed = 0;
+				magicBallExistence =true;
+				magicballTimeCheck()
+		}else if(e.which == 40 & e.ctrlKey){
+				magicBallAttackdirection = "down";
+				magicBallLocation =[myCharacterX+(characterWidth/2)-(magicBallDiameter/2),myCharacterY+characterHeight,30,30]
+				magicBallXspeed = 0;
+				magicBallYspeed = 3;
+				magicBallExistence =true;
+				magicballTimeCheck()
+		}else if(e.which == 38 & e.ctrlKey){
+				magicBallAttackdirection = "up";
+				magicBallLocation =[myCharacterX+(characterWidth/2)-(magicBallDiameter/2),myCharacterY,30,30]
+				magicBallXspeed = 0;
+				magicBallYspeed = -3;
+				magicBallExistence =true;
+				magicballTimeCheck()
 		}
-	}else if(e.which == 37 & e.ctrlKey){
-		if(!magicBallExistence){
-			magicBallAttackdirection = "left";
-			magicBallLocation =[myCharacterX,myCharacterY+(characterHeight/2)-(magicBallDiameter/2),30,30]
-			magicBallXspeed = -3;
-			magicBallYspeed = 0;
-			magicBallExistence =true;
-			magicballTimeCheck()
-			}
-	}else if(e.which == 40 & e.ctrlKey){
-		if(!magicBallExistence){
-			magicBallAttackdirection = "down";
-			magicBallLocation =[myCharacterX+(characterWidth/2)-(magicBallDiameter/2),myCharacterY+characterHeight,30,30]
-			magicBallXspeed = 0;
-			magicBallYspeed = 3;
-			magicBallExistence =true;
-			magicballTimeCheck()
-			}
-	}else if(e.which == 38 & e.ctrlKey){
-		if(!magicBallExistence){
-			magicBallAttackdirection = "up";
-			magicBallLocation =[myCharacterX+(characterWidth/2)-(magicBallDiameter/2),myCharacterY,30,30]
-			magicBallXspeed = 0;
-			magicBallYspeed = -3;
-			magicBallExistence =true;
-			magicballTimeCheck()
-			}
-	}
+    }	
 });
 
 
@@ -708,13 +712,12 @@ function launchMagicBall(){
 	ctx.drawImage(magicBallImg,magicBallLocation[0],magicBallLocation[1],magicBallLocation[2],magicBallLocation[3]);	
 }
 
+var magicballTimeout =null;
 function  magicballTimeCheck(){
 	
-	setTimeout(function() {
+	magicballTimeout = setTimeout(function() {
 		  console.log('check');
-		 
 		  magicBallExistence =false;  
-		  console.log(magicBallExistence);
 	}, 2000);
 	
 }
@@ -792,6 +795,26 @@ function getDiamondAjax(diamondNumber){
 		}	
 	});
 }
+
+
+
+function deathMonsterAjax(no){
+	
+	$.ajax({
+		url:"<c:url value="/map/monster/death"/>",//요청할 서버의 URL주소
+		type:'get',//데이타 전송방식(디폴트는 get방식) 
+		dataType:'text',//서버로 부터 응답 받을 데이타의 형식 설정 응답 : 죽은 몬스터 id 값
+		data:"monsterId="+monsterId[no]+"&monsterX="+monsterX[no]+"&monsterY="+monsterY[no],
+		success:function(data){
+			
+		 	console.log('성공 : ',data);
+		},
+		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
+			console.log('에러 : ',error.responseText);
+		}	
+	});
+}
+
 
 
 //캐릭터 모션

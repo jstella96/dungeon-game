@@ -51,23 +51,41 @@ var monsterX=[],
 	monsterPosition = [], //width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
 	monsterLimitStart = [],
 	monsterLimitEnd = [],
-	levelMonster = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
-	levelMonsterLife = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+	monsterLevel = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+	basicMonsterLife = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
 	monsterLife = [],	
 	monsterLocation = [];
+	monsterDeath = [];
+	monsterId = [];	
 <c:if test="${!empty monsterList}">
 	<c:forEach var="item" items="${monsterList }">
 	
-	monsterX.push(${item.minX}*standardLength);
-	monsterY.push(${item.minY}*standardLength-monsterHeight);
+	if(${item.x}==0){ // null 값이 0으로 들어온다. x값이 없다는건 죽은 몬스터가 아니다.
+		monsterX.push(${item.minX}*standardLength+15);
+		monsterY.push(${item.minY}*standardLength-monsterHeight);
+		monsterLife.push(${item.life});
+		monsterDeath.push(false)
+	}else{
+		monsterX.push(${item.x});
+		monsterY.push(${item.y});
+		monsterLife.push(0);
+		monsterDeath.push(true)
+	}	
+	
+	//포지션따라서 다르게
+	if('${item.position}'=='width'){
+		monsterLimitStart.push(${item.minX}*standardLength);
+		monsterLimitEnd.push(${item.maxX}*standardLength - monsterWidth);
+	}else{
+		monsterLimitStart.push(${item.minY}*standardLength);
+		monsterLimitEnd.push(${item.maxY}*standardLength - monsterHeight);
+	}
 	monsterSpeed.push(2);
 	monsterPosition.push('${item.position}');//width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
-	monsterLimitStart.push(${item.minX}*standardLength);
-	monsterLimitEnd.push(${item.maxX}*standardLength - monsterWidth);
-	levelMonster.push(${item.level});//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
-	levelMonsterLife.push(${item.life});
-	monsterLife.push(${item.life});
+	monsterLevel.push(${item.level});//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+	basicMonsterLife.push(${item.life});
 	monsterLocation.push([0,64,30,32]);
+	monsterId.push(${item.id});
 	</c:forEach>
 </c:if>
 
@@ -129,6 +147,7 @@ function draw() {
      drawMonster(0);
      drawMonster(1);
      drawMonster(2);
+     drawMonster(3);
      drawMyCharacter();
 
      

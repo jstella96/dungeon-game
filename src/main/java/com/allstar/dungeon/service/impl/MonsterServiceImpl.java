@@ -23,7 +23,7 @@ public class MonsterServiceImpl implements MonsterService {
 	}
 
 	@Override
-	public void modifyMonster(Map map) {
+	public void inputMonsterDeath(Map map) {
 		
 		dao.insertMonsterDeath(map);
 		

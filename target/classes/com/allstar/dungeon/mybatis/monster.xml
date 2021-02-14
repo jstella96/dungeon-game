@@ -29,7 +29,8 @@
 		 
 	</select>
 	<update id="updateMonsterDeath" parameterType="java.util.Map">
-		UPDATE diamondget SET state='false' WHERE no = ${diamondNumber} and id='${id}'
+		INSERT INTO monster_death(monster_id,member_id,monster_x,monster_y)
+			values(#{monsterId},#{id},#{monsterX},#{monsterY})
 	</update>
 
 

@@ -79,6 +79,19 @@ public class MapController {
 		return diaNumber;
 	}
 	
+	//monster get
+	@RequestMapping(value="monster/death",produces = "text/html; charset=UTF-8")
+	@ResponseBody
+	public String deathMonsterAjax(@RequestParam Map map,HttpServletRequest req) {
+		
+		String id= req.getSession().getAttribute("memberId").toString();
+		map.put("id",id);
+		String monsterId = map.get("monsterId").toString();
+		monsterService.inputMonsterDeath(map);
+		
+		return monsterId;
+	}
+	
 
 
 }

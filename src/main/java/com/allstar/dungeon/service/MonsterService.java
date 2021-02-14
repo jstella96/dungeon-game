@@ -9,6 +9,6 @@ public interface MonsterService {
 
 	List<MonsterDTO> getMonsters(Map map);
 
-	void modifyMonster(Map map);
+	void inputMonsterDeath(Map map);
 	
 }
