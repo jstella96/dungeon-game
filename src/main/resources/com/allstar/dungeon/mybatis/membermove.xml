@@ -15,8 +15,7 @@
 			<result property="x" column="member_x"/>
 			<result property="y" column="member_y"/>
 			<result property="diamondCount" column="diamond_count"/>
-			<result property="redDiamondCount" column="red_diamond_count"/>
-			
+			<result property="redDiamondCount" column="red_diamond_count"/>	
 	</resultMap>
 	
 	

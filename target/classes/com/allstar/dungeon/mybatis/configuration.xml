@@ -12,12 +12,14 @@
 			type="com.allstar.dungeon.dto.MemberDTO" />
 		<typeAlias alias="monsterDTO"
 		type="com.allstar.dungeon.dto.MonsterDTO" />
+		<typeAlias alias="diamondDTO"
+		type="com.allstar.dungeon.dto.DiamondDTO" />
 	</typeAliases>
 
  	<mappers>
  		<mapper	resource="com/allstar/dungeon/mybatis/member.xml" />
  		<mapper	resource="com/allstar/dungeon/mybatis/membermove.xml" />
- 		<mapper	resource="com/allstar/dungeon/mybatis/dungeon.xml" />
+ 		<mapper	resource="com/allstar/dungeon/mybatis/diamond.xml" />
  		<mapper	resource="com/allstar/dungeon/mybatis/monster.xml" />
 	</mappers>
 </configuration>

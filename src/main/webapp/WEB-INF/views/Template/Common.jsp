@@ -70,7 +70,7 @@
 	</div>
 	<div class="diamond-cell">Diamond<br>
 		<span id="gemDiv">
-			<i class="fas fa-gem"></i> X <span>${memberDto.diamondCount}</span>
+			<i class="fas fa-gem"></i> X <span id="diamondCount">${memberDto.diamondCount}</span>
 		</span>
 	</div>		
 	<div class="inventory-cell">item</div>
@@ -391,9 +391,8 @@ function targetCrash(targetX ,targetY,targetWidth,targetHeight){
 
 //다이아몬드 그리는 메소드
 //drowDiamond(다이아몬드 한개의 이미지,그려질 정보를 담은 4개의 배열[X좌표,Y좌표,가로길이,세로길이],다이아몬드 고유숫자,나타냄여부_캐릭터가 보석을 습득했을경우 보여지지않음)
-function drawDiamond(diamondImg,diamondPositionArr,diamondNumber,showOrhide){
+function drawDiamond(diamondImg,diamondPositionArr,diamondId,showOrhide){
 	  if(showOrhide){
-		 
 	        ctx.drawImage(diamondImg,
 			        		diamondPositionArr[0],
 			        		diamondPositionArr[1],
@@ -401,21 +400,25 @@ function drawDiamond(diamondImg,diamondPositionArr,diamondNumber,showOrhide){
 			        		diamondPositionArr[3]
 			        		)
 	        var state = targetCrash(diamondPositionArr[0] ,diamondPositionArr[1],
-	        			 	diamondPositionArr[2],diamondPositionArr[3],diamondNumber);  
+	        			 	diamondPositionArr[2],diamondPositionArr[3],diamondId);  
 	        if(state != null){
-	          	var arrNo = diamondNo.indexOf(diamondNumber);
+	        	console.log("asdasdasd");
+	          	var arrNo = this.diamondId.indexOf(diamondId);
 	             diamondState[arrNo]=false;
-	             getDiamondAjax(diamondNumber)
+	             getDiamondAjax(diamondId)
 	             //보석 사라지는 부분  끝
 	        	console.log(diamondState[arrNo]);
-	        	console.log(diamondNumber);
+	        	console.log(diamondId);
 	        	
 	        	//여긴 보석 +1 부분인데 ajax 처리가 바람직해보인다. 
-	        	test= parseInt(test);
-	        	test+=1;
-	        	document.getElementById("test").innerHTML=test;
+	        	//test= parseInt(test);
+	        	//test+=1;
+	        	//document.getElementById("test").innerHTML=test;
 	        	
 	        }
+	        
+	  }else{
+		  return;
 	  }
 }
 
@@ -503,7 +506,6 @@ var ddddddd =false;
 var life =${memberDto.life};
 
 
-
 //몬스터 죽었을때 실행: 피,시체,아이템 떨군다.
 function monsterDieMotion(no){
 	ctx.drawImage(design2Img,128,95,32,32,monsterX[no] ,monsterY[no],40,40)
@@ -516,10 +518,8 @@ function monsterDieMotion(no){
 function drawMonster(no){
 	if(monsterDeath[no]){
     	monsterDieMotion(no);
-    	console.log("너가 안뜨는 건 말이 안되 잖아.??")
     	return;
 	}
-	console.log(no,"너ㅁㄴㅇㅁ잖아.??")
  	//몬스터 레벨에따라 생명령 다르게
     var remainingLife=basicMonsterLife[no]-(basicMonsterLife[no] - monsterLife[no]);
     if (remainingLife <= 0){
@@ -780,15 +780,19 @@ console.log(diamondNo);
 
 
 
-function getDiamondAjax(diamondNumber){
-	
+function getDiamondAjax(diamondId){
+	console.log("번호"+diamondId)
 	$.ajax({
-		url:"<c:url value="/map/diamond"/>",//요청할 서버의 URL주소
-		type:'post',//데이타 전송방식(디폴트는 get방식) 
+		url:"<c:url value="/map/diamond/get"/>",//요청할 서버의 URL주소
+		type:'get',//데이타 전송방식(디폴트는 get방식) 
 		dataType:'text',//서버로 부터 응답 받을 데이타의 형식 설정
-		data:"diamondNumber="+diamondNumber,
+		data:"diamondId="+diamondId,
 		success:function(data){
-		 	console.log('서버로부터 받는 데이타 : ',data);
+		 	//console.log('성공:',data);
+		 	//여기서 + 처리 해주는게 아닌가
+			var diaCount = $("#diamondCount").html()
+			diaCount++;
+			$("#diamondCount").html(diaCount);
 		},
 		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
 			console.log('에러 : ',error.responseText);
@@ -806,7 +810,6 @@ function deathMonsterAjax(no){
 		dataType:'text',//서버로 부터 응답 받을 데이타의 형식 설정 응답 : 죽은 몬스터 id 값
 		data:"monsterId="+monsterId[no]+"&monsterX="+monsterX[no]+"&monsterY="+monsterY[no],
 		success:function(data){
-			
 		 	console.log('성공 : ',data);
 		},
 		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수

@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.allstar.dungeon.dto.DiamondDTO;
 import com.allstar.dungeon.dto.MemberDTO;
 import com.allstar.dungeon.dto.MonsterDTO;
+import com.allstar.dungeon.service.DiamondService;
 import com.allstar.dungeon.service.MemberMoveService;
 import com.allstar.dungeon.service.MonsterService;
 
@@ -32,6 +34,9 @@ public class MapController {
 	
 	@Resource(name = "monsterService")
 	private MonsterService monsterService;
+	
+	@Resource(name = "diamondService")
+	private DiamondService diamondService;
 	
 	@RequestMapping("change")
 	public String mapChange(@RequestParam Map map,Model model,HttpServletRequest req) {
@@ -50,15 +55,16 @@ public class MapController {
 				
 		MemberDTO memberDto = moveService.getMember(id);
 		model.addAttribute("memberDto",memberDto);
+		
 		Map map = new HashMap();
 		map.put("id",id);
 		map.put("map",memberDto.getMap());
+		//1]몬스터 리스트
 		List<MonsterDTO> monsterList =  monsterService.getMonsters(map);
 		model.addAttribute("monsterList",monsterList);
-		//map에 따른 사용자의 다이아몬드 습득 정보 가져오기
-		//map.put("page",memberGameInfo.get("map"));
-		//List<Map> list = sqlMapper.selectList("dungeonDiamondSelect", map);
-		//model.addAttribute("diaList",list);
+		//2]다이아몬드 리스트
+		List<DiamondDTO> diamondList = diamondService.getDiamonds(map);
+		model.addAttribute("diamondList",diamondList);
 
 		return String.format("Map/Map%d.dungeon",memberDto.getMap());
 
@@ -67,16 +73,15 @@ public class MapController {
 	
 	
 	//diamond get
-	@RequestMapping(value="diamond",produces = "text/html; charset=UTF-8")
+	@RequestMapping(value="diamond/get",produces = "text/html; charset=UTF-8")
 	@ResponseBody
 	public String diamondGet(@RequestParam Map map,HttpServletRequest req) {
-		
-		String member_Id= req.getSession().getAttribute("member_Id").toString();
-		map.put("id",member_Id);
-		String diaNumber = map.get("diamondNumber").toString();
-		sqlMapper.update("dungeonDiamondUpdate",map);
-		
-		return diaNumber;
+		System.out.println("아이디 있나?");
+		System.out.println(map.get("diamondId").toString());
+		String id= req.getSession().getAttribute("memberId").toString();
+		map.put("id",id);
+		diamondService.inputDiamondGet(map);
+		return map.get("diamondId").toString();
 	}
 	
 	//monster get

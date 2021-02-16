@@ -24,14 +24,14 @@ BrickPositionArr = [
 
 //다이아몬드 true/false 상채
 var diamondState = [];
-var diamondNo = [];
+var diamondId = [];
 console.log(diamondState);
-console.log(diamondNo);
+console.log(diamondId);
 <c:if test="${!empty diamondList}">
 	 <c:forEach var="item" items="${diamondList }">
-	 console.log("??");
+	  console.log("??");
 	  diamondState.push(${item.state});
-	  diamondNo.push(${item.no});
+	  diamondId.push(${item.id});
 	</c:forEach>
 </c:if>
 
@@ -109,7 +109,7 @@ var monsterLife = [1];
 	
 	
 //몬스터 위쪽 아래쪽 반복여부에 따른 
-treasureExistence = true;
+treasureExistence = false;
 var treasurePositionArr =[3*standardLength+20,2*standardLength-60,60,60];//drawTreasure(treasureImg,[90*3,100,60,60]);
 
 
@@ -134,9 +134,9 @@ function draw() {
     //drawMyCharacter();
     mapChange();
    
-    <c:if test="${!empty diaList}">
-	    <c:forEach var="item" items="${diaList }" varStatus="loop">	
-			drawDiamond(diamondImg,[standardLength*(${item.x}-1),standardLength*${item.y}-diamondLength,diamondLength,diamondLength],diamondNo[${loop.index}],diamondState[${loop.index}]);
+    <c:if test="${!empty diamondList}">
+	    <c:forEach var="item" items="${diamondList }" varStatus="loop">	
+			drawDiamond(diamondImg,[standardLength*(${item.x}-1),standardLength*${item.y}-diamondLength,diamondLength,diamondLength],diamondId[${loop.index}],diamondState[${loop.index}]);
 		</c:forEach>
 	</c:if>
     
