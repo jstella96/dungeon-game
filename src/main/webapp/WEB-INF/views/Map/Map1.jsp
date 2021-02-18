@@ -22,96 +22,11 @@ BrickPositionArr = [
 
 
 
-//다이아몬드 true/false 상채
-var diamondState = [];
-var diamondId = [];
-console.log(diamondState);
-console.log(diamondId);
-<c:if test="${!empty diamondList}">
-	 <c:forEach var="item" items="${diamondList }">
-	  console.log("??");
-	  diamondState.push(${item.state});
-	  diamondId.push(${item.id});
-	</c:forEach>
-</c:if>
 
 
-//몬스터 필수 값 , 고정값, location 은 몬스터 레벨따라 바꿀까?
-var monsterWidth=50,
-  monsterHeight=50;
-  
-//레밸따라 로케이션도 바꿔야행...
-
-
-////////////////////////
-
-var monsterX=[],
-	monsterY=[],// 50 몬스터 한 변 길이
-	monsterSpeed=[],
-	monsterPosition = [], //width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
-	monsterLimitStart = [],
-	monsterLimitEnd = [],
-	monsterLevel = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
-	basicMonsterLife = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
-	monsterLife = [],	
-	monsterLocation = [];
-	monsterDeath = [];
-	monsterId = [];	
-<c:if test="${!empty monsterList}">
-	<c:forEach var="item" items="${monsterList }">
-	
-	if(${item.x}==0){ // null 값이 0으로 들어온다. x값이 없다는건 죽은 몬스터가 아니다.
-		monsterX.push(${item.minX}*standardLength+15);
-		monsterY.push(${item.minY}*standardLength-monsterHeight);
-		monsterLife.push(${item.life});
-		monsterDeath.push(false)
-	}else{
-		monsterX.push(${item.x});
-		monsterY.push(${item.y});
-		monsterLife.push(0);
-		monsterDeath.push(true)
-	}	
-	
-	//포지션따라서 다르게
-	if('${item.position}'=='width'){
-		monsterLimitStart.push(${item.minX}*standardLength);
-		monsterLimitEnd.push(${item.maxX}*standardLength - monsterWidth);
-	}else{
-		monsterLimitStart.push(${item.minY}*standardLength);
-		monsterLimitEnd.push(${item.maxY}*standardLength - monsterHeight);
-	}
-	monsterSpeed.push(2);
-	monsterPosition.push('${item.position}');//width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
-	monsterLevel.push(${item.level});//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
-	basicMonsterLife.push(${item.life});
-	monsterLocation.push([0,64,30,32]);
-	monsterId.push(${item.id});
-	</c:forEach>
-</c:if>
-
-/*
-var monsterX=[5*standardLength],
-    monsterY=[8*standardLength-monsterHeight],// 50 몬스터 한 변 길이
-    monsterSpeed=[2],
-	monsterPosition = ['width'], //width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
-	monsterLimitStart = [5*standardLength],
-	monsterLimitEnd = [9*standardLength - monsterWidth];
-//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
-var levelMonster = [1];
-var levelMonsterLife = [1];
-var monsterLife = [1];	
-	//몬스터 Width 고려
-	//monsterLimitTopY = 5*standardLength,
-	//monsterLimitBottomY = 9*standardLength - 50;//몬스터 height
-	
-	
-	*/
-	
-	
 //몬스터 위쪽 아래쪽 반복여부에 따른 
 treasureExistence = false;
 var treasurePositionArr =[3*standardLength+20,2*standardLength-60,60,60];//drawTreasure(treasureImg,[90*3,100,60,60]);
-
 
 //보물상자 
 //메소드 X. 
@@ -140,14 +55,20 @@ function draw() {
 		</c:forEach>
 	</c:if>
     
-   // drawDiamond(diamondImg,[standardLength*(3-1),standardLength*2-diamondLength,diamondLength,diamondLength],0,chdia[0]);
-    //drawDiamond(diamondImg,[standardLength*(4-1),standardLength*2-diamondLength,diamondLength,diamondLength],1,chdia[1]);
-    //drawDiamond(diamondImg,[standardLength*(5-1),standardLength*2-diamondLength,diamondLength,diamondLength],2,chdia[2]);
-     
-     drawMonster(0);
-     drawMonster(1);
-     drawMonster(2);
-     drawMonster(3);
+	 <c:if test="${!empty monsterList}">
+	    <c:forEach var="item" items="${monsterList }" varStatus="loop">	
+	   	 drawMonster(${loop.index});
+		</c:forEach>
+	</c:if>
+
+	   
+    <c:if test="${!empty itemList}">
+	    <c:forEach var="item" items="${itemList }" varStatus="loop">	
+	  	  drawItem("${item.name}",[standardLength*(${item.x}-1),standardLength*${item.y}-itemLength,itemLength,itemLength],itemId[${loop.index}],itemState[${loop.index}]);
+		</c:forEach>
+	</c:if>
+    
+	
      drawMyCharacter();
 
      
@@ -169,45 +90,7 @@ function draw() {
      }
  
 }
-var endGameInterval;
-var endGameCountDownInterval;
-var endGameTime = 0;
-var endGameCountDownTime =10;
-function endGame(){
-	endGameTime++;
-	ctx.beginPath();
-	ctx.rect(0, 0, canvas.width, endGameTime*standardLength);
-	ctx.fillStyle = "#000000";
-	ctx.fill();
-	ctx.closePath();
-	if(endGameTime==10){
-		clearInterval(endGameInterval);
-		ctx.fillStyle = '#999999';
-	    ctx.font = ' bold 28px Arial, sans-serif';
-	    ctx.fillText("GameOver", 528, 400);
-	    endGameCountDownInterval=setInterval(endGameCountDown, 1000);
-		//10-9-8-7 해서 게임 오버 만들기. 
-	}
-}
-function endGameCountDown(){
-	
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.beginPath();
-	ctx.rect(0, 0, canvas.width, endGameTime*standardLength);
-	ctx.fillStyle = "#000000";
-	ctx.fill();
-	ctx.fillStyle = '#999999';
-    ctx.font = ' bold 28px Arial, sans-serif';
-    ctx.fillText("GameOver", 528, 400);
-    ctx.fillText(endGameCountDownTime, 587, 450);
-    endGameCountDownTime--;
-    if(endGameCountDownTime < 0 ){
-    	clearInterval(endGameCountDownInterval);
-    	console.log("메인 이동");
-    	location.href="<c:url value='/'/>";
-        
-    }
-}
+
 
 function backgroundDesign(){
 	 //해골.디자인.앞 4개 고정

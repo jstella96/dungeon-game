@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace속성:매퍼파일의 완전한경로 .xml는 생략 -->
+
+<mapper namespace="com.allstar.dungeon.mybatis.itemMapper">
+	
+	<resultMap type="itemDTO" id="itemDTOResult">
+			<result property="id" column="item_id"/>
+			<result property="map" column="item_map"/>
+			<result property="x" column="item_x"/>
+			<result property="y" column="item_y"/>
+			<result property="name" column="item_name"/>
+			<result property="state" column="state"/>
+			<result property="use" column="item_use"/>
+	</resultMap>
+	
+	<select id="selectItemList" parameterType="java.util.Map" resultMap="itemDTOResult">
+		SELECT d.*,  IF(ISNULL(g.member_id), 'true', 'false') AS state, IFNULL(g.item_use,"false") AS item_use  
+			FROM item d LEFT JOIN (SELECT *FROM item_get WHERE member_id = #{id}) g
+			ON d.item_id =g.item_id
+			<if test="map != null">
+		     WHERE d.item_map = #{map}	
+			</if>	
+	</select>
+	
+	<update id="insertItemGet" parameterType="java.util.Map">
+		INSERT INTO item_get VALUES(#{itemId},#{id},'false')
+	</update>
+	
+</mapper>

@@ -105,7 +105,7 @@ var standardLength = 90;
 
 //게임 다이아몬드의 사이즈
 var diamondLength = 40;
-
+var itemLength = 30;
 //게임이 표시 될 캔버스의 너비
 var canvasWidth = 13*standardLength;
 var canvasHeight = 9*standardLength;
@@ -195,13 +195,159 @@ attackImg.src = '<c:url value="/resources/img/map/attack.png"/>';
 var magicBallImg = new Image;
 magicBallImg.src = '<c:url value="/resources/img/map/magicBall.png"/>';
 
-
 var bloodImg = new Image;
 bloodImg.src = '<c:url value="/resources/img/map/blood.png"/>';
+
+var keyImg = new Image;
+keyImg.src = '<c:url value="/resources/img/map/key.png"/>';
 
 //디폴트 false 사용하는 페이지에서 true로 전환
 var monsterExistence = false;
 var treasureExistence = false;
+
+//다이아몬드 true/false 상채
+var diamondState = [];
+var diamondId = [];
+<c:if test="${!empty diamondList}">
+	 <c:forEach var="item" items="${diamondList }">
+	  diamondState.push(${item.state});
+	  diamondId.push(${item.id});
+	</c:forEach>
+</c:if>
+
+var itemState = [];
+var itemId = [];
+<c:if test="${!empty itemList}">
+	 <c:forEach var="item" items="${itemList}">
+		itemState.push(${item.state});
+	 	itemId.push(${item.id});
+	 	
+	</c:forEach>
+</c:if>
+
+
+
+//몬스터 필수 값 , 고정값, location 은 몬스터 레벨따라 바꿀까?
+var monsterWidth=50,
+    monsterHeight=50;
+  
+//레밸따라 로케이션도 바꿔야행...
+
+
+////////////////////////
+
+var monsterX=[],
+	monsterY=[],// 50 몬스터 한 변 길이
+	monsterSpeed=[],
+	monsterPosition = [], //width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
+	monsterLimitStart = [],
+	monsterLimitEnd = [],
+	monsterLevel = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+	basicMonsterLife = [],//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+	monsterLife = [],	
+	monsterLocation = [];
+	monsterDeath = [];
+	monsterId = [];	
+<c:if test="${!empty monsterList}">
+	<c:forEach var="item" items="${monsterList }">
+	
+	if(${item.x}==0){ // null 값이 0으로 들어온다. x값이 없다는건 죽은 몬스터가 아니다.
+		monsterX.push(${item.minX}*standardLength+15);
+		monsterY.push(${item.minY}*standardLength-monsterHeight);
+		monsterLife.push(${item.life});
+		monsterDeath.push(false)
+	}else{
+		monsterX.push(${item.x});
+		monsterY.push(${item.y});
+		monsterLife.push(0);
+		monsterDeath.push(true)
+	}	
+	
+	//포지션따라서 다르게
+	if('${item.position}'=='width'){
+		monsterLimitStart.push(${item.minX}*standardLength);
+		monsterLimitEnd.push(${item.maxX}*standardLength - monsterWidth);
+	}else{
+		monsterLimitStart.push(${item.minY}*standardLength);
+		monsterLimitEnd.push(${item.maxY}*standardLength - monsterHeight);
+	}
+	monsterSpeed.push(2);
+	monsterPosition.push('${item.position}');//width or height 포지션에 따라 아래 한계값 다르게 주면 된다. 
+	monsterLevel.push(${item.level});//레벨 별 몬스터 생명 수 여기 변수 바꿔!!!! 이게 뭐야
+	basicMonsterLife.push(${item.life});
+	monsterLocation.push([0,64,30,32]);
+	monsterId.push(${item.id});
+	</c:forEach>
+</c:if>
+
+var endGameInterval;
+var endGameCountDownInterval;
+var endGameTime = 0;
+var endGameCountDownTime =10;
+function endGame(){
+	endGameTime++;
+	ctx.beginPath();
+	ctx.rect(0, 0, canvas.width, endGameTime*standardLength);
+	ctx.fillStyle = "#000000";
+	ctx.fill();
+	ctx.closePath();
+	if(endGameTime==10){
+		clearInterval(endGameInterval);
+		ctx.fillStyle = '#999999';
+	    ctx.font = ' bold 28px Arial, sans-serif';
+	    ctx.fillText("GameOver", 528, 400);
+	    endGameCountDownInterval=setInterval(endGameCountDown, 1000);
+		//10-9-8-7 해서 게임 오버 만들기. 
+	}
+}
+function endGameCountDown(){
+	
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.beginPath();
+	ctx.rect(0, 0, canvas.width, endGameTime*standardLength);
+	ctx.fillStyle = "#000000";
+	ctx.fill();
+	ctx.fillStyle = '#999999';
+    ctx.font = ' bold 28px Arial, sans-serif';
+    ctx.fillText("GameOver", 528, 400);
+    ctx.fillText(endGameCountDownTime, 587, 450);
+    endGameCountDownTime--;
+    if(endGameCountDownTime < 0 ){
+    	clearInterval(endGameCountDownInterval);
+    	console.log("메인 이동");
+    	location.href="<c:url value='/'/>";
+        
+    }
+}
+
+function drawItem(itemName,itemPositionArr,itemId,showOrhide){
+	  if(showOrhide){
+		  	switch(itemName) {
+			case "key":
+				ctx.drawImage(keyImg,itemPositionArr[0],itemPositionArr[1],
+								itemPositionArr[2],itemPositionArr[3])
+				break;
+			case "key1":
+				ctx.drawImage(keyImg,itemPositionArr[0],itemPositionArr[1],
+						itemPositionArr[2],itemPositionArr[3])
+				break;
+			case "key2":
+				ctx.drawImage(keyImg,itemPositionArr[0],itemPositionArr[1],
+						itemPositionArr[2],itemPositionArr[3])
+				break;
+		  	}
+	        var state = targetCrash(itemPositionArr[0] ,itemPositionArr[1],
+	        					itemPositionArr[2],itemPositionArr[3],itemId);  
+	        if(state != null){
+	        	var arrNo = this.itemId.indexOf(itemId);
+	        	itemState[arrNo]=false;
+	            getItemAjax(itemId)
+	        }
+	        
+	  }else{
+		  return;
+	  }
+}
 
 //공통메소드 이동메소드
 function mapChange(){
@@ -406,15 +552,6 @@ function drawDiamond(diamondImg,diamondPositionArr,diamondId,showOrhide){
 	          	var arrNo = this.diamondId.indexOf(diamondId);
 	             diamondState[arrNo]=false;
 	             getDiamondAjax(diamondId)
-	             //보석 사라지는 부분  끝
-	        	console.log(diamondState[arrNo]);
-	        	console.log(diamondId);
-	        	
-	        	//여긴 보석 +1 부분인데 ajax 처리가 바람직해보인다. 
-	        	//test= parseInt(test);
-	        	//test+=1;
-	        	//document.getElementById("test").innerHTML=test;
-	        	
 	        }
 	        
 	  }else{
@@ -799,6 +936,24 @@ function getDiamondAjax(diamondId){
 		}	
 	});
 }
+
+function getItemAjax(itemId){
+	console.log("번호"+itemId)
+	$.ajax({
+		url:"<c:url value="/map/item/get"/>",//요청할 서버의 URL주소
+		type:'get',//데이타 전송방식(디폴트는 get방식) 
+		dataType:'text',//서버로 부터 응답 받을 데이타의 형식 설정
+		data:"itemId="+itemId,
+		success:function(data){
+		 	
+			console.log("성공")
+		},
+		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
+			console.log('에러 : ',error.responseText);
+		}	
+	});
+}
+
 
 
 

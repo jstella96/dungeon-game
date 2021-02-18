@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.allstar.dungeon.dto.DiamondDTO;
+import com.allstar.dungeon.dto.ItemDTO;
 import com.allstar.dungeon.dto.MemberDTO;
 import com.allstar.dungeon.dto.MonsterDTO;
 import com.allstar.dungeon.service.DiamondService;
+import com.allstar.dungeon.service.ItemService;
 import com.allstar.dungeon.service.MemberMoveService;
 import com.allstar.dungeon.service.MonsterService;
 
@@ -37,6 +39,9 @@ public class MapController {
 	
 	@Resource(name = "diamondService")
 	private DiamondService diamondService;
+	
+	@Resource(name = "itemService")
+	private ItemService itemService;
 	
 	@RequestMapping("change")
 	public String mapChange(@RequestParam Map map,Model model,HttpServletRequest req) {
@@ -65,18 +70,33 @@ public class MapController {
 		//2]다이아몬드 리스트
 		List<DiamondDTO> diamondList = diamondService.getDiamonds(map);
 		model.addAttribute("diamondList",diamondList);
+		//3]아이템 리스트
+		List<ItemDTO> itemList = itemService.getItems(map);
+		model.addAttribute("itemList",itemList);
 
+		
 		return String.format("Map/Map%d.dungeon",memberDto.getMap());
 
 	}
 	
+
+	@RequestMapping(value="item/get",produces = "text/html; charset=UTF-8")
+	@ResponseBody
+	public String itemGet(@RequestParam Map map,HttpServletRequest req) {
+	
+		System.out.println(map.get("itemId").toString());
+		String id= req.getSession().getAttribute("memberId").toString();
+		map.put("id",id);
+		itemService.inputItemGet(map);
+		return map.get("itemId").toString();
+	}
 	
 	
 	//diamond get
 	@RequestMapping(value="diamond/get",produces = "text/html; charset=UTF-8")
 	@ResponseBody
 	public String diamondGet(@RequestParam Map map,HttpServletRequest req) {
-		System.out.println("아이디 있나?");
+	
 		System.out.println(map.get("diamondId").toString());
 		String id= req.getSession().getAttribute("memberId").toString();
 		map.put("id",id);
