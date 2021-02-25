@@ -100,6 +100,7 @@ CREATE TABLE monster
 );
 
 
+
 CREATE TABLE monster_death
 (
 	monster_id int NOT NULL,
@@ -107,7 +108,6 @@ CREATE TABLE monster_death
 	monster_x int NOT NULL,
 	monster_y int NOT NULL
 );
-
 
 CREATE TABLE red_diamond
 (

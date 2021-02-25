@@ -16,4 +16,5 @@ public class MemberDTO {
 	int y;
 	int diamondCount;
 	int redDiamondCount;
+
 }

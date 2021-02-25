@@ -21,7 +21,6 @@
 	</resultMap>
 	
 	<select id="selectMonsterList" parameterType="java.util.Map" resultMap="monsterDTOResult">
-		
 		SELECT m.monster_id,m.monster_level,m.monster_life,m.monster_map,
 			m.monster_min_x,m.monster_max_x,m.monster_min_y,m.monster_max_y,d.monster_x,d.monster_y,m.monster_position
 			FROM monster m LEFT JOIN (SELECT *FROM monster_death WHERE member_id = #{id}) d

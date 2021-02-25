@@ -25,11 +25,11 @@
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
         <property name="url"
-            value="jdbc:mysql://localhost:3306/dungeon?characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;useSSL=false">
+            value="jdbc:mysql://localhost:3306/dungeon?characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true">
         </property>
 
-        <property name="username" value="Dungeon"></property>
-        <property name="password" value="Dungeon"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="kosmo2020"></property>
     </bean>        
 	
 	<!-- sqlSessionFactory --> 
