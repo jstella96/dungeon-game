@@ -21,6 +21,7 @@ import com.allstar.dungeon.dto.ItemDTO;
 import com.allstar.dungeon.dto.MemberDTO;
 import com.allstar.dungeon.dto.MonsterDTO;
 import com.allstar.dungeon.service.DiamondService;
+import com.allstar.dungeon.service.EventService;
 import com.allstar.dungeon.service.ItemService;
 import com.allstar.dungeon.service.MemberMoveService;
 import com.allstar.dungeon.service.MonsterService;
@@ -43,6 +44,10 @@ public class MapController {
 	
 	@Resource(name = "itemService")
 	private ItemService itemService;
+	
+	@Resource(name = "eventService")
+	private EventService eventService;
+	
 	
 	@RequestMapping("change")
 	public String mapChange(@RequestParam Map map,Model model,HttpServletRequest req) {
@@ -137,6 +142,7 @@ public class MapController {
 		return JSONArray.toJSONString(itemList);
 	}/////////////////////
 	
+	
 	@RequestMapping(value="use/item",produces = "text/html; charset=UTF-8")
 	@ResponseBody
 	public void useItem(@RequestParam Map map) {	
@@ -145,4 +151,23 @@ public class MapController {
 		
 	}
 	
+	@RequestMapping(value="/clear/event",produces = "text/html; charset=UTF-8")
+	@ResponseBody
+	public void clearEvent(@RequestParam Map map) {	
+		
+		eventService.inputEventClear(map);;
+		
+	}
+	
+	@RequestMapping(value="get/event",produces = "text/html; charset=UTF-8")
+	@ResponseBody
+	public String getEventAjax(@RequestParam Map map) {;
+	     String rusult = eventService.getEventClear(map);
+	     
+		return rusult;
+	}/////////////////////
+
+	
+	
+
 }

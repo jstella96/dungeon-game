@@ -35,15 +35,11 @@ lanternImg.src = '<c:url value="/resources/img/map/lanternDark.png"/>';
 var timeCount = 0;
 var noticExistence = false;
 var LanternCheck = true;
-
+var eventId=1;
 
 //Member 테이블 체크해서 재생여부 판단. 
-prologExistence =false;
+//prologExistence =false;
 /*시작위치 */
-if(prologExistence){
-	myCharacterX = 180;
-	myCharacterY = 520;
-}
 
 
 function mapEvent(){
@@ -172,6 +168,47 @@ function keyDownNoticHandler(e) {
     }   
 }
 
+/*이벤트 판단*/
+function clearEventAjax(eventId){
+
+	$.ajax({
+		url:"<c:url value="/map/clear/event"/>",//요청할 서버의 URL주소
+		type:'get',//데이타 전송방식(디폴트는 get방식) 
+		data:'id=${sessionScope.memberId}&event_id='+eventId,
+		success:function(){
+			console.log("이벤트 달성")
+		},
+		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
+			console.log('에러 : ',error.responseText);
+		}	
+	});
+}
+
+function EventCheckAjax(eventId){
+
+	$.ajax({
+		url:"<c:url value="/map/get/event"/>",//요청할 서버의 URL주소
+		type:'get',//데이타 전송방식(디폴트는 get방식) 
+		data:'id=${sessionScope.memberId}&event_id='+eventId,
+		dataType:'text',
+		success:function(data){
+			if(data == "y"){
+				prologExistence = true;
+				myCharacterX = 180;
+				myCharacterY = 520;
+				clearEventAjax(eventId);
+			}else{
+				prologExistence = false;
+			}
+		},
+		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
+			console.log('에러 : ',error.responseText);
+		}	
+	});
+}
+
+
+EventCheckAjax(eventId)
 
 
 </script>

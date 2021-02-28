@@ -24,5 +24,6 @@
  		<mapper	resource="com/allstar/dungeon/mybatis/diamondMapper.xml" />
  		<mapper	resource="com/allstar/dungeon/mybatis/monsterMapper.xml" />
  		<mapper	resource="com/allstar/dungeon/mybatis/itemMapper.xml" />
+ 		<mapper	resource="com/allstar/dungeon/mybatis/eventMapper.xml" />
 	</mappers>
 </configuration>

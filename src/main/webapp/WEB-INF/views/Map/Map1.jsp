@@ -24,6 +24,7 @@ BrickPositionArr = [
 var treasureEventExistence = true;
 var touchCheck = false;
 var redDiamondShow=false;
+var eventId = 1;
 
 var treasureImg =new Image;
 treasureImg.src = '<c:url value="/resources/img/map/treasureClose.png"/>';
@@ -80,9 +81,14 @@ function keyDownNoticHandler(e){
 			 treasureEventExistence=false;
 			 redDiamondShow=true;
 			 useItemAjax(1);
+			 clearEventAjax(eventId);
 		 } 
     }   
 }
+
+
+
+//이벤트 관련 메소드.
 
 function drawRedDiamond(redDiamondImg,showOrhide){
 	  if(showOrhide){
@@ -107,9 +113,9 @@ function getRedDiamondAjax(){
 		type:'get',//데이타 전송방식(디폴트는 get방식) 
 		data:'id=${sessionScope.memberId}&map=${memberDto.map}',
 		success:function(){
-			console.log("레드 다이아 습득")
+			//console.log("레드 다이아 습득")
 			var diaCount = $("#diamondCount").html()
-			diaCount = int(diaCount)+10;
+			diaCount = parseInt(diaCount)+10;
 			$("#diamondCount").html(diaCount);
 		},
 		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
@@ -133,6 +139,43 @@ function useItemAjax(itemId){
 		}	
 	});
 }
+
+function clearEventAjax(eventId){
+
+	$.ajax({
+		url:"<c:url value="/map/clear/event"/>",//요청할 서버의 URL주소
+		type:'get',//데이타 전송방식(디폴트는 get방식) 
+		data:'id=${sessionScope.memberId}&event_id='+eventId,
+		success:function(){
+			console.log("이벤트 달성")
+		},
+		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
+			console.log('에러 : ',error.responseText);
+		}	
+	});
+}
+
+function EventCheckAjax(eventId){
+
+	$.ajax({
+		url:"<c:url value="/map/get/event"/>",//요청할 서버의 URL주소
+		type:'get',//데이타 전송방식(디폴트는 get방식) 
+		data:'id=${sessionScope.memberId}&event_id='+eventId,
+		dataType:'text',
+		success:function(data){
+			if(data == "y"){
+				treasureEventExistence = true;
+			}else{
+				treasureEventExistence = false;
+			}
+		},
+		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
+			console.log('에러 : ',error.responseText);
+		}	
+	});
+}
+
+EventCheckAjax(eventId)
 </script>
 
 

@@ -68,13 +68,13 @@
     background-size: cover;
     
 }.item.key{
- 	background-image: url('<c:url value="/resources/img/map/key.png"/>');
+ 	background-image: url('<c:url value="/resources/img/map/redkey.png"/>');
 }.item.redkey{
- 	background-image: url('<c:url value="/resources/img/map/key.png"/>');
+ 	background-image: url('<c:url value="/resources/img/map/redkey.png"/>');
 }.item.bluekey{
- 	background-image: url('<c:url value="/resources/img/map/key.png"/>');
+ 	background-image: url('<c:url value="/resources/img/map/redkey.png"/>');
 }.item.yellokey{
- 	background-image: url('<c:url value="/resources/img/map/key.png"/>');
+ 	background-image: url('<c:url value="/resources/img/map/redkey.png"/>');
 }
 </style>
 
@@ -237,7 +237,7 @@ var redDiamondImg =new Image;
 redDiamondImg.src = '<c:url value="/resources/img/map/reddiamond.png"/>';
 
 var keyImg =new Image;
-keyImg.src = '<c:url value="/resources/img/map/key.png"/>';
+keyImg.src = '<c:url value="/resources/img/map/redkey.png"/>';
 
 var design1Img = new Image;
 design1Img.src = '<c:url value="/resources/img/map/design1.gif"/>';
