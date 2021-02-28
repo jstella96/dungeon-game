@@ -28,4 +28,9 @@ public class DiamondServiceImpl implements DiamondService {
 		dao.insertDiamondGet(map);
 	}
 
+	@Override
+	public void inputRedDiamondGet(Map map) {
+		dao.insertRedDiamondGet(map);
+	}
+
 }

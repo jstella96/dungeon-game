@@ -15,4 +15,6 @@ public interface ItemService {
 
 	List<Map> getItemsInven(Map map);
 	
+	void modifyItemGet(Map map);
+	
 }

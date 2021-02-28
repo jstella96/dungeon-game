@@ -49,4 +49,11 @@ public class ItemServiceImpl implements ItemService {
 		return list;
 	}
 
+	@Override
+	public void modifyItemGet(Map map) {
+		
+		dao.updateItemGet(map);
+		
+	}
+
 }

@@ -132,13 +132,18 @@ function itemSetting(){
 		dataType:'json',//서버로 부터 응답 받을 데이타의 형식 설정
 		data:'id=${sessionScope.memberId}',
 		success:function(data){
+			var invenSize=0;
+			getItems=[];
+			$(".inventory-cell").html("item");
 			$.each(data,function(index,element){
-				console.log(element["state"]);
 				if(element["state"] == "false" && element["use"] == "false"){
-					//$(".item").eq(index).addClass(element["name"]);
+					var itemOption = 'item <span class="item '+element["name"]+'"> </span>';
+					$(".inventory-cell").eq(invenSize).html(itemOption);
+					invenSize++;
+					getItems.push(element["name"]);
+					console.log(getItems);
 				}
-			});	
-			
+			});				
 		},
 		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
 			console.log('에러 : ',error.responseText);
@@ -228,11 +233,8 @@ characterImg.src = '<c:url value="/resources/img/map/monster.png"/>';
 var diamondImg =new Image;
 diamondImg.src = '<c:url value="/resources/img/map/diamond.png"/>';
 
-var treasureImg =new Image;
-treasureImg.src = '<c:url value="/resources/img/map/treasureClose.png"/>';
-
-var treasureOpenImg =new Image;
-treasureOpenImg.src = '<c:url value="/resources/img/map/treasureOpen.png"/>';
+var redDiamondImg =new Image;
+redDiamondImg.src = '<c:url value="/resources/img/map/reddiamond.png"/>';
 
 var keyImg =new Image;
 keyImg.src = '<c:url value="/resources/img/map/key.png"/>';
@@ -257,7 +259,8 @@ keyImg.src = '<c:url value="/resources/img/map/key.png"/>';
 
 //디폴트 false 사용하는 페이지에서 true로 전환
 var monsterExistence = false;
-var treasureExistence = false;
+
+var prologExistence =false;
 
 //다이아몬드 true/false 상채
 var diamondState = [];
@@ -338,6 +341,62 @@ var endGameInterval;
 var endGameCountDownInterval;
 var endGameTime = 0;
 var endGameCountDownTime =10;
+
+
+function draw() {
+    //1] 캔버스 전체 삭제 후 새로 그리기
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+   
+    //2] 바닥에 그려지는 순서 배경 -> 벽 - > 캐릭터 
+    drawBackground(backgroundImg);
+    drawBrick(brickImg,BrickPositionArr,true);
+    backgroundDesign()
+    //drawMyCharacter();
+    mapChange();
+    mapEvent();
+    
+    <c:if test="${!empty diamondList}">
+	    <c:forEach var="item" items="${diamondList }" varStatus="loop">	
+			drawDiamond(diamondImg,[standardLength*(${item.x}-1),standardLength*${item.y}-diamondLength,diamondLength,diamondLength],diamondId[${loop.index}],diamondState[${loop.index}]);
+		</c:forEach>
+	</c:if>
+    
+	 <c:if test="${!empty monsterList}">
+	    <c:forEach var="item" items="${monsterList }" varStatus="loop">	
+	   	 drawMonster(${loop.index});
+		</c:forEach>
+	</c:if>
+
+	   
+    <c:if test="${!empty itemList}">
+	    <c:forEach var="item" items="${itemList }" varStatus="loop">	
+	  	  drawItem("${item.name}",[standardLength*(${item.x}-1),standardLength*${item.y}-itemLength,itemLength,itemLength],itemId[${loop.index}],itemState[${loop.index}]);
+	  	 </c:forEach>
+	</c:if>
+	
+
+     if(attackExistence){
+    	monsterAttack();
+     }	
+     
+     if(magicBallExistence){
+    	 console.log(magicBallExistence);
+    	 launchMagicBall()
+     }
+     if(life==0){
+    	 clearInterval(drowinterval);
+    	 endGameInterval = setInterval(endGame, 200);
+     }
+     
+     //map0의 프롤로그 or 캐릭터 스스로 움직일 때는 실행되면 안됨
+ 	if(prologExistence != true){
+      drawMyCharacter();
+ 	}
+
+}
+
+
+
 function endGame(){
 	endGameTime++;
 	ctx.beginPath();
@@ -526,37 +585,7 @@ function drawCharacter(characterImg,characterPositionArr,crashCheck){
 	 }
 }	  
 
-//보물상자 그리기
-function drawTreasure(treasureImg,treasurePositionArr){
-	  
-        ctx.drawImage(treasureImg,
-	        		treasurePositionArr[0],
-	        		treasurePositionArr[1],
-	                treasurePositionArr[2],
-	                treasurePositionArr[3]);
-        
-        var state = targetCrash(treasurePositionArr[0] ,treasurePositionArr[1],treasurePositionArr[2],treasurePositionArr[3]);                
-   		if(state != null){
-   			switch (state){
-   		    case 'left':
-   		     		console.log("left");
-   		        break;
-   		    case 'rigth':
-   		    		console.log("rigth");
-   		        break;
-   		    case 'top':
-   		   			console.log("top");
-   		        break;
-   		    case 'bottom':
-   		   			console.log("bottom");
-   		        break;
-   		    default :
-   		       		console.log("error");
-   		}
-   			
-   		}
-    
-}
+
 //충돌체크 메소드, 타겟의 정보를 받아와서 캐릭터와의 충돌여부를 체크한다.
 //targetCrash(타겟)
 function targetCrash(targetX ,targetY,targetWidth,targetHeight){
@@ -1078,4 +1107,5 @@ function leftMotion(){
 	
 
 
+var interval = setInterval(draw, 10);
 </script>

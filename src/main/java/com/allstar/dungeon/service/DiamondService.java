@@ -12,4 +12,6 @@ public interface DiamondService {
 
 	void inputDiamondGet(Map map);
 	
+	void inputRedDiamondGet(Map map);
+	
 }

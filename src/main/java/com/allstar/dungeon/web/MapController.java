@@ -85,7 +85,7 @@ public class MapController {
 	@ResponseBody
 	public String itemGet(@RequestParam Map map,HttpServletRequest req) {
 	
-		System.out.println(map.get("itemId").toString());
+		//System.out.println(map.get("itemId").toString());
 		String id= req.getSession().getAttribute("memberId").toString();
 		map.put("id",id);
 		itemService.inputItemGet(map);
@@ -98,11 +98,19 @@ public class MapController {
 	@ResponseBody
 	public String diamondGet(@RequestParam Map map,HttpServletRequest req) {
 	
-		System.out.println(map.get("diamondId").toString());
+		//System.out.println(map.get("diamondId").toString());
 		String id= req.getSession().getAttribute("memberId").toString();
 		map.put("id",id);
 		diamondService.inputDiamondGet(map);
 		return map.get("diamondId").toString();
+	}
+	
+	@RequestMapping(value="/reddia/get",produces = "text/html; charset=UTF-8")
+	@ResponseBody
+	public void redDiaGet(@RequestParam Map map) {	
+		
+		diamondService.inputRedDiamondGet(map);
+		
 	}
 	
 	//monster death
@@ -119,7 +127,7 @@ public class MapController {
 	}
 	
 	//3]문제 카테고리 바꾸기
-	@RequestMapping(value="/item/get/inben",produces = "text/html; charset=UTF-8")
+	@RequestMapping(value="item/get/inben",produces = "text/html; charset=UTF-8")
 	@ResponseBody
 	public String getItemsAjax(HttpServletRequest req,@RequestParam Map map) {;
 		List<Map> itemList = itemService.getItemsInven(map);
@@ -128,6 +136,13 @@ public class MapController {
 		/*JSONArray의 정적 메소드인 toJSONString(List계열 컬렉션) 사용*/
 		return JSONArray.toJSONString(itemList);
 	}/////////////////////
-
-
+	
+	@RequestMapping(value="use/item",produces = "text/html; charset=UTF-8")
+	@ResponseBody
+	public void useItem(@RequestParam Map map) {	
+		
+		itemService.modifyItemGet(map);
+		
+	}
+	
 }

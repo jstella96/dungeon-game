@@ -20,8 +20,12 @@
 		  ON d.diamond_id =g.diamond_id where d.diamond_map = #{map}
 		
 	</select>
-	<update id="insertDiamondGet" parameterType="java.util.Map">
+	<insert id="insertDiamondGet" parameterType="java.util.Map">
 		INSERT INTO diamond_get VALUES(#{diamondId},#{id})
-	</update>
+	</insert>
+	<insert id="insertRedDiamondGet" parameterType="java.util.Map">
+		INSERT INTO red_diamond_get VALUES(#{id},#{map})
+	</insert>
+	
 	
 </mapper>

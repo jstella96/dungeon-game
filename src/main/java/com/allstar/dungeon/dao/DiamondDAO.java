@@ -23,6 +23,12 @@ public class DiamondDAO {
 
 	public void insertDiamondGet(Map map) {
 		
-		sqlMapper.update("insertDiamondGet",map);
+		sqlMapper.insert("insertDiamondGet",map);
+	}
+	
+
+	public void insertRedDiamondGet(Map map) {
+		
+		sqlMapper.insert("insertRedDiamondGet",map);
 	}
 }

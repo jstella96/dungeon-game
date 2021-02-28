@@ -19,6 +19,16 @@ var BrickPositionArr = [
                    [0,4,12],
                    [0,2,3,4,6,7,8,10,11,12]
                 ]; 
+function backgroundDesign(){
+	 //해골.디자인.앞 4개 고정
+	 ctx.drawImage(design2Img,128,95,32,32,280,280,40,40)
+}
+
+
+function mapEvent(){
+	 //해골.디자인.앞 4개 고정
+	 ctx.drawImage(design2Img,128,95,32,32,280,340,40,40)
+}
 
 </script>
 

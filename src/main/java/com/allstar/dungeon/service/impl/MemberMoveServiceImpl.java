@@ -20,7 +20,7 @@ public class MemberMoveServiceImpl implements MemberMoveService{
 	public MemberDTO getMember(String id) {
 		//회원정보 반환
 		MemberDTO dto =  dao.selectMember(id);
-		int diamondCount = dto.getDiamondCount() + dto.getRedDiamondCount();
+		int diamondCount = dto.getDiamondCount() + dto.getRedDiamondCount()*10;
 		dto.setDiamondCount(diamondCount); 
 		return dto;
 	}

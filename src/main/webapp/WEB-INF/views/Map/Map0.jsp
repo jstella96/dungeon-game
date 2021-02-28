@@ -32,14 +32,13 @@ lanternImg.src = '<c:url value="/resources/img/map/lanternDark.png"/>';
 
 
 
-
 var timeCount = 0;
 var noticExistence = false;
 var LanternCheck = true;
-//Member 테이블 체크해서 재생여부 판단.
-var prologExistence =false;
 
 
+//Member 테이블 체크해서 재생여부 판단. 
+prologExistence =false;
 /*시작위치 */
 if(prologExistence){
 	myCharacterX = 180;
@@ -47,22 +46,9 @@ if(prologExistence){
 }
 
 
-
-//0]draw() 함수
-function draw() {
-    //0-1] 캔버스 전체 삭제 후 새로 그리기
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-   
-    //0-2] 바닥에 그려지는 순서 배경 -> 벽 - > 소품
-    //mapChange(); _ 맵 이동 관련 함수.
-    mapChange();
-    drawBackground(backgroundImg);
-    drawBrick(brickImg,BrickPositionArr,true); 
-    BackgroundDesign() 
-    
-    
-    //0-3] 캐릭터 위치가 bbs 근방에 있고, 스페이스를 눌렀을때 설명서가 펴진다.noticExistence는 아래 함수에서도 변경된다.
-    if( myCharacterX > 700 &&  myCharacterX < 950 &&  myCharacterY > 200 &&  myCharacterY < 500 ){
+function mapEvent(){
+	 //0-3] 캐릭터 위치가 bbs 근방에 있고, 스페이스를 눌렀을때 설명서가 펴진다.noticExistence는 아래 함수에서도 변경된다.
+    if( myCharacterX > 700 &&  myCharacterX < 950 &&  myCharacterY > 200 &&  myCharacterY < 400 ){
 		 if(noticExistence){
 			 ctx.drawImage(noticImg, 200,300,300,200);  
 		 }
@@ -73,17 +59,10 @@ function draw() {
     //0-4]rologExistence 프롤로그를 한번 재생한 후에는  재재생이 안되도록.
      if(prologExistence){
     	 playProlog()
-     }else{
-    	 drawMyCharacter(); 
      }
-       	
- }
-
-function BackgroundDesign(){
-	 drawCharacter(design2Img,[128,95,32,32,860,300,30,30],true);
-	 drawCharacter(design2Img,[325,65,88,63,780,250,90,90],true);
-
 }
+
+
 
 
 //0]event 1번 : 프롤로그 실행 함수. timeCount를 이용해 시나리오를 만든다.
@@ -160,6 +139,14 @@ function playProlog(){
 
 
 
+function backgroundDesign(){
+	 drawCharacter(design2Img,[128,95,32,32,860,300,30,30],true);
+	 drawCharacter(design2Img,[325,65,88,63,780,250,90,90],true);
+
+}
+
+
+
 
 function Lantern(){
 	grd = ctx.createRadialGradient(myCharacterX+35, myCharacterY+35, 20,  myCharacterX+35, myCharacterY+35, 150),
@@ -186,7 +173,6 @@ function keyDownNoticHandler(e) {
 }
 
 
-var interval = setInterval(draw, 10);
 
 </script>
 

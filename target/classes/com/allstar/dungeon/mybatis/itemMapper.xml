@@ -30,4 +30,8 @@
 		INSERT INTO item_get VALUES(0,#{itemId},#{id},'false')
 	</insert>
 	
+	<update id="updateItemGet" parameterType="java.util.Map">
+		UPDATE item_get SET item_use = 'true' WHERE member_id =#{id} and item_id =#{item_id};
+	</update>
+	
 </mapper>
