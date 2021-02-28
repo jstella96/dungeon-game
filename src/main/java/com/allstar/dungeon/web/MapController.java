@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONArray;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -104,7 +105,7 @@ public class MapController {
 		return map.get("diamondId").toString();
 	}
 	
-	//monster get
+	//monster death
 	@RequestMapping(value="monster/death",produces = "text/html; charset=UTF-8")
 	@ResponseBody
 	public String deathMonsterAjax(@RequestParam Map map,HttpServletRequest req) {
@@ -117,6 +118,16 @@ public class MapController {
 		return monsterId;
 	}
 	
+	//3]문제 카테고리 바꾸기
+	@RequestMapping(value="/item/get/inben",produces = "text/html; charset=UTF-8")
+	@ResponseBody
+	public String getItemsAjax(HttpServletRequest req,@RequestParam Map map) {;
+		List<Map> itemList = itemService.getItemsInven(map);
+
+		System.out.println(itemList.size());
+		/*JSONArray의 정적 메소드인 toJSONString(List계열 컬렉션) 사용*/
+		return JSONArray.toJSONString(itemList);
+	}/////////////////////
 
 
 }

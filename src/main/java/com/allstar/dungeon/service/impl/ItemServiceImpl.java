@@ -1,9 +1,12 @@
 package com.allstar.dungeon.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.print.attribute.HashPrintJobAttributeSet;
 
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,21 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public void inputItemGet(Map map) {
 		dao.insertItemGet(map);
+	}
+
+	@Override
+	public List<Map> getItemsInven(Map map) {
+		// TODO Auto-generated method stub
+		List<Map> list = new ArrayList<Map>();
+		List<ItemDTO> itemList = dao.selectItemList(map);
+		for(ItemDTO dto : itemList) {
+			Map itemMap = new HashMap();
+			itemMap.put("state", dto.getState());
+			itemMap.put("name", dto.getName());
+			itemMap.put("use", dto.getUse());
+			list.add(itemMap);
+		}
+		return list;
 	}
 
 }

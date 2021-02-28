@@ -23,10 +23,11 @@
 			<if test="map != null">
 		     WHERE d.item_map = #{map}	
 			</if>	
+			ORDER BY g.item_get_id;
 	</select>
 	
-	<update id="insertItemGet" parameterType="java.util.Map">
-		INSERT INTO item_get VALUES(#{itemId},#{id},'false')
-	</update>
+	<insert id="insertItemGet" parameterType="java.util.Map">
+		INSERT INTO item_get VALUES(0,#{itemId},#{id},'false')
+	</insert>
 	
 </mapper>

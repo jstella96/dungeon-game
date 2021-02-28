@@ -65,7 +65,7 @@ function draw() {
     <c:if test="${!empty itemList}">
 	    <c:forEach var="item" items="${itemList }" varStatus="loop">	
 	  	  drawItem("${item.name}",[standardLength*(${item.x}-1),standardLength*${item.y}-itemLength,itemLength,itemLength],itemId[${loop.index}],itemState[${loop.index}]);
-		</c:forEach>
+	  	 </c:forEach>
 	</c:if>
     
 	

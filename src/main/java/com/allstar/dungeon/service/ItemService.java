@@ -12,5 +12,7 @@ public interface ItemService {
 	List<ItemDTO> getItems(Map map);
 
 	void inputItemGet(Map map);
+
+	List<Map> getItemsInven(Map map);
 	
 }

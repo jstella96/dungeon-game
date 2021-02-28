@@ -23,6 +23,7 @@
    color: #281f2a
 }.inventory-cell{
     width:66px;
+    position:relative;
 }.life-cell{
     width:200px;
     position:relative;
@@ -56,6 +57,24 @@
 	color:#888888;
 	font-weight: 700;
 	cursor: pointer;
+}.item{
+	position:absolute;
+	width: 70%;
+	height: 60%;
+	top: 27%;
+    left: 15%;
+    min-height: 70%;
+    background-position: center;
+    background-size: cover;
+    
+}.item.key{
+ 	background-image: url('<c:url value="/resources/img/map/key.png"/>');
+}.item.redkey{
+ 	background-image: url('<c:url value="/resources/img/map/key.png"/>');
+}.item.bluekey{
+ 	background-image: url('<c:url value="/resources/img/map/key.png"/>');
+}.item.yellokey{
+ 	background-image: url('<c:url value="/resources/img/map/key.png"/>');
 }
 </style>
 
@@ -72,13 +91,25 @@
 		<span id="gemDiv">
 			<i class="fas fa-gem"></i> X <span id="diamondCount">${memberDto.diamondCount}</span>
 		</span>
-	</div>		
-	<div class="inventory-cell">item</div>
-	<div class="inventory-cell">item</div>
-	<div class="inventory-cell">item</div>
-	<div class="inventory-cell">item</div>
-	<div class="inventory-cell">item</div>
-	<div class="inventory-cell">item</div>
+	</div>	
+	<div class="inventory-cell">item
+		<span class="item"> </span>
+	</div>
+	<div class="inventory-cell">item
+		<span class="item"> </span>
+	</div>
+	<div class="inventory-cell">item
+		<span class="item"> </span>
+	</div>
+	<div class="inventory-cell">item
+		<span class="item"> </span>
+	</div>	
+	<div class="inventory-cell">item
+			<span class="item"> </span>
+	</div>	
+	<div class="inventory-cell">item
+			<span class="item"> </span>
+	</div>	
 	<div id="save-cell">
 	<i class="fa fa-history"></i><span>자동저장 중</span><br>
 	</div>
@@ -92,6 +123,29 @@
 <script>
 //캔버스 사용 설정
 
+var getItems=[];
+
+function itemSetting(){
+	$.ajax({
+		url:"<c:url value="/map/item/get/inben"/>",//요청할 서버의 URL주소
+		type:'get',//데이타 전송방식(디폴트는 get방식) 
+		dataType:'json',//서버로 부터 응답 받을 데이타의 형식 설정
+		data:'id=${sessionScope.memberId}',
+		success:function(data){
+			$.each(data,function(index,element){
+				console.log(element["state"]);
+				if(element["state"] == "false" && element["use"] == "false"){
+					//$(".item").eq(index).addClass(element["name"]);
+				}
+			});	
+			
+		},
+		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수
+			console.log('에러 : ',error.responseText);
+		}	
+	});
+}
+itemSetting()
 
 var canvas = document.getElementById("myCanvas");
 var test = $("#test").html();

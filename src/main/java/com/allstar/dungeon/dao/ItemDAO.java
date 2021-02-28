@@ -24,6 +24,6 @@ public class ItemDAO {
 
 	public void insertItemGet(Map map) {
 		
-		sqlMapper.update("insertItemGet",map);
+		sqlMapper.insert("insertItemGet",map);
 	}
 }
