@@ -67,14 +67,14 @@
     background-position: center;
     background-size: cover;
     
-}.item.key{
- 	background-image: url('<c:url value="/resources/img/map/redkey.png"/>');
-}.item.redkey{
- 	background-image: url('<c:url value="/resources/img/map/redkey.png"/>');
-}.item.bluekey{
- 	background-image: url('<c:url value="/resources/img/map/redkey.png"/>');
-}.item.yellokey{
- 	background-image: url('<c:url value="/resources/img/map/redkey.png"/>');
+}.item.key1{
+ 	background-image: url('<c:url value="/resources/img/map/boxkey/key1.png"/>');
+}.item.key2{
+ 	background-image: url('<c:url value="/resources/img/map/boxkey/key2.png"/>');
+}.item.key3{
+ 	background-image: url('<c:url value="/resources/img/map/boxkey/key3.png"/>');
+}.item.key4{
+ 	background-image: url('<c:url value="/resources/img/map/boxkey/key4.png"/>');
 }
 </style>
 
@@ -236,9 +236,6 @@ diamondImg.src = '<c:url value="/resources/img/map/diamond.png"/>';
 var redDiamondImg =new Image;
 redDiamondImg.src = '<c:url value="/resources/img/map/reddiamond.png"/>';
 
-var keyImg =new Image;
-keyImg.src = '<c:url value="/resources/img/map/redkey.png"/>';
-
 var design1Img = new Image;
 design1Img.src = '<c:url value="/resources/img/map/design1.gif"/>';
 
@@ -254,8 +251,17 @@ magicBallImg.src = '<c:url value="/resources/img/map/magicBall.png"/>';
 var bloodImg = new Image;
 bloodImg.src = '<c:url value="/resources/img/map/blood.png"/>';
 
-var keyImg = new Image;
-keyImg.src = '<c:url value="/resources/img/map/key.png"/>';
+var key1Img = new Image;
+key1Img.src =  '<c:url value="/resources/img/map/boxkey/key1.png"/>';
+
+var key2Img = new Image;
+key2Img.src =  '<c:url value="/resources/img/map/boxkey/key2.png"/>';
+
+var key3Img = new Image;
+key3Img.src =  '<c:url value="/resources/img/map/boxkey/key3.png"/>';
+
+var key4Img = new Image;
+key4Img.src =  '<c:url value="/resources/img/map/boxkey/key4.png"/>';
 
 //디폴트 false 사용하는 페이지에서 true로 전환
 var monsterExistence = false;
@@ -354,10 +360,9 @@ function draw() {
     //drawMyCharacter();
     mapChange();
     mapEvent();
-    
     <c:if test="${!empty diamondList}">
-	    <c:forEach var="item" items="${diamondList }" varStatus="loop">	
-			drawDiamond(diamondImg,[standardLength*(${item.x}-1),standardLength*${item.y}-diamondLength,diamondLength,diamondLength],diamondId[${loop.index}],diamondState[${loop.index}]);
+	    <c:forEach var="item" items="${diamondList }" varStatus="loop">
+			drawDiamond(diamondImg,[standardLength*(${item.x}-1)+25,standardLength*${item.y}-diamondLength,diamondLength,diamondLength],diamondId[${loop.index}],diamondState[${loop.index}]);
 		</c:forEach>
 	</c:if>
     
@@ -436,16 +441,20 @@ function endGameCountDown(){
 function drawItem(itemName,itemPositionArr,itemId,showOrhide){
 	  if(showOrhide){
 		  	switch(itemName) {
-			case "key":
-				ctx.drawImage(keyImg,itemPositionArr[0],itemPositionArr[1],
+			case "key1":
+				ctx.drawImage(key1Img,itemPositionArr[0]+30,itemPositionArr[1]-20,
 								itemPositionArr[2],itemPositionArr[3])
 				break;
-			case "key1":
-				ctx.drawImage(keyImg,itemPositionArr[0],itemPositionArr[1],
+			case "key2":
+				ctx.drawImage(key2Img,itemPositionArr[0]+30,itemPositionArr[1]-20,
 						itemPositionArr[2],itemPositionArr[3])
 				break;
-			case "key2":
-				ctx.drawImage(keyImg,itemPositionArr[0],itemPositionArr[1],
+			case "key3":
+				ctx.drawImage(key3Img,itemPositionArr[0]+30,itemPositionArr[1]-20,
+						itemPositionArr[2],itemPositionArr[3])
+				break;
+		  	case "key4":
+				ctx.drawImage(key4Img,itemPositionArr[0]+30,itemPositionArr[1]-20,
 						itemPositionArr[2],itemPositionArr[3])
 				break;
 		  	}
@@ -621,7 +630,7 @@ function targetCrash(targetX ,targetY,targetWidth,targetHeight){
 //다이아몬드 그리는 메소드
 //drowDiamond(다이아몬드 한개의 이미지,그려질 정보를 담은 4개의 배열[X좌표,Y좌표,가로길이,세로길이],다이아몬드 고유숫자,나타냄여부_캐릭터가 보석을 습득했을경우 보여지지않음)
 function drawDiamond(diamondImg,diamondPositionArr,diamondId,showOrhide){
-	  if(showOrhide){
+	 if(showOrhide){
 	        ctx.drawImage(diamondImg,
 			        		diamondPositionArr[0],
 			        		diamondPositionArr[1],
@@ -629,9 +638,8 @@ function drawDiamond(diamondImg,diamondPositionArr,diamondId,showOrhide){
 			        		diamondPositionArr[3]
 			        		)
 	        var state = targetCrash(diamondPositionArr[0] ,diamondPositionArr[1],
-	        			 	diamondPositionArr[2],diamondPositionArr[3],diamondId);  
+	        			 	diamondPositionArr[2],diamondPositionArr[3]);  
 	        if(state != null){
-	        	console.log("asdasdasd");
 	          	var arrNo = this.diamondId.indexOf(diamondId);
 	             diamondState[arrNo]=false;
 	             getDiamondAjax(diamondId)
@@ -985,21 +993,6 @@ function drawBackground(backgroundImg){
 }
 
 
-//다이아몬드 true/false 상채
-var diamondState = [];
-var diamondNo = [];
-console.log(diamondState);
-console.log(diamondNo);
-<c:if test="${!empty diaList}">
-	 <c:forEach var="item" items="${diaList }">
-	 console.log("??");
-	  diamondState.push(${item.state});
-	  diamondNo.push(${item.no});
-	</c:forEach>
-</c:if>
-
-
-
 function getDiamondAjax(diamondId){
 	console.log("번호"+diamondId)
 	$.ajax({
@@ -1028,7 +1021,7 @@ function getItemAjax(itemId){
 		dataType:'text',//서버로 부터 응답 받을 데이타의 형식 설정
 		data:"itemId="+itemId,
 		success:function(data){
-		 	
+		     itemSetting();
 			console.log("성공")
 		},
 		error:function(error){//서버로부터 비정상적인 응답을 받았을때 호출되는 콜백함수

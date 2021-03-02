@@ -22,7 +22,7 @@ var BrickPositionArr = [
 
 function backgroundDesign(){
 	 //해골.디자인.앞 4개 고정
-	 ctx.drawImage(design2Img,128,95,32,32,280,280,40,40)
+	// ctx.drawImage(design2Img,128,95,32,32,280,280,40,40)
 }
 
 

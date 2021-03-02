@@ -35,7 +35,7 @@ lanternImg.src = '<c:url value="/resources/img/map/lanternDark.png"/>';
 var timeCount = 0;
 var noticExistence = false;
 var LanternCheck = true;
-var eventId=1;
+var eventId=5;
 
 //Member 테이블 체크해서 재생여부 판단. 
 //prologExistence =false;
