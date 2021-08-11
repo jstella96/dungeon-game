@@ -7,10 +7,13 @@ Spring 과 MySQL을 적용하여 업그레이드한 의미 있는 프로젝트 �
 
 ## Stack
 
-Language : Java, JSP, JavaScript, Html5, Css3, SQL, JQuery  
+Language : Java , JavaScript, Html5, Css3, SQL  
 Service System : Spring4, MyBatis, Apache Tomcat  
-Tool : Eclipse, Sql developer, ERMaster  
-Database : Oracle11g
+Database : MySQL8.0  
+Tool : Eclipse, Workbench, ERMaster  
+형상관리 : Git/GitHub  
+배포 :Amazon Web Service(EC2, RDS, ROUTE53)  
+
 
 ## 결과화면
 
