@@ -17,7 +17,7 @@ Tool : Eclipse, Workbench, ERMaster
 
 ## 결과화면
 
-__:movie_camera: **[시연영상 바로가기 클릭](https://www.youtube.com/watch?v=S76dEhq3IyE)**__
+:movie_camera: **[시연영상 바로가기 클릭](https://www.youtube.com/watch?v=S76dEhq3IyE)**
 
 ![던전게임 실행화면](./readme/Dungeon.png)
 
