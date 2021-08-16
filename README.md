@@ -1,4 +1,5 @@
-:skull: __<span style="color:red">옛날 코드 주의</span>__  
+:skull: **<span style="color:red">옛날 코드 주의</span>**
+
 # DungeonGame
 
 2000년대 감성을 가진 던전 게임으로써 16개의 맵으로 이루어져 있습니다. 몬스터를 처치하고 보물을 모으면서 미로를 던전을 탈출 하는 고전 게임입니다.  
@@ -12,15 +13,14 @@ Service System : Spring4, MyBatis, Apache Tomcat
 Database : MySQL8.0  
 Tool : Eclipse, Workbench, ERMaster  
 형상관리 : Git/GitHub  
-배포 :Amazon Web Service(EC2, RDS, ROUTE53)  
-
+배포 :Amazon Web Service(EC2, RDS, ROUTE53)
 
 ## 결과화면
 
 :movie_camera: **[시연영상 바로가기 클릭](https://www.youtube.com/watch?v=S76dEhq3IyE)**
 
-![던전게임 실행화면](./img/Dungeon.png)
+![던전게임 실행화면](./readme/Dungeon.png)
 
 ## ERD
 
-![던전게임 ERD](./img/DungeonERD.png)
+![던전게임 ERD](./readme/DungeonERD.png)
